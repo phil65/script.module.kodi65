@@ -25,3 +25,13 @@ def merge_dicts(*dict_args):
     for dictionary in dict_args:
         result.update(dictionary)
     return result
+
+
+def get_skin_string(name):
+    return xbmc.getInfoLabel("Skin.String(%s)").decode("utf-8")
+
+
+def set_skin_string(name, value):
+    xbmc.executebuiltin("Skin.SetString(%s, %s)" % (name, value))
+
+

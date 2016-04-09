@@ -60,6 +60,11 @@ def set_userrating(media_type, dbid, rating):
                  params={"episodeid": dbid, "userrating": rating})
 
 
+def get_favourites():
+    return get_json(method="Favourites.GetFavourites",
+                    params={"type": None, "properties": ["path", "thumbnail", "window", "windowparameter"]})
+
+
 def set_art(media_type, art, dbid):
     get_json(method="VideoLibrary.Set%sDetails" % media_type,
              params={"art": art,
