@@ -408,35 +408,44 @@ def media_streamdetails(filename, streamdetails):
     video = streamdetails['video']
     audio = streamdetails['audio']
     if video:
-        if (video[0]['width'] <= 720 and video[0]['height'] <= 480):
+        # see StreamDetails.cpp
+        if video[0]['width'] + video[0]['height'] == 0:
+            info['VideoResolution'] = ""
+        elif video[0]['width'] <= 720 and video[0]['height'] <= 480:
             info['VideoResolution'] = "480"
-        elif (video[0]['width'] <= 768 and video[0]['height'] <= 576):
+        elif video[0]['width'] <= 768 and video[0]['height'] <= 576:
             info['VideoResolution'] = "576"
-        elif (video[0]['width'] <= 960 and video[0]['height'] <= 544):
+        elif video[0]['width'] <= 960 and video[0]['height'] <= 544:
             info['VideoResolution'] = "540"
-        elif (video[0]['width'] <= 1280 and video[0]['height'] <= 720):
+        elif video[0]['width'] <= 1280 and video[0]['height'] <= 720:
             info['VideoResolution'] = "720"
-        elif (video[0]['width'] >= 1281 or video[0]['height'] >= 721):
+        elif video[0]['width'] <= 1920 and video[0]['height'] <= 1080:
             info['VideoResolution'] = "1080"
+        elif video[0]['width'] * video[0]['height'] >= 6000000:
+            info['VideoResolution'] = "4K"
         else:
             info['videoresolution'] = ""
         info['VideoCodec'] = str(video[0]['codec'])
-        if (video[0]['aspect'] < 1.4859):
+        if video[0]['aspect'] < 1.3499:  # sqrt(1.33*1.37)
             info['VideoAspect'] = "1.33"
-        elif (video[0]['aspect'] < 1.7190):
+        elif video[0]['aspect'] < 1.5080:  # sqrt(1.37*1.66)
+            info['VideoAspect'] = "1.37"
+        elif video[0]['aspect'] < 1.7190:  # sqrt(1.66*1.78)
             info['VideoAspect'] = "1.66"
-        elif (video[0]['aspect'] < 1.8147):
+        elif video[0]['aspect'] < 1.8147:  # sqrt(1.78*1.85)
             info['VideoAspect'] = "1.78"
-        elif (video[0]['aspect'] < 2.0174):
+        elif video[0]['aspect'] < 2.0174:  # sqrt(1.85*2.20)
             info['VideoAspect'] = "1.85"
-        elif (video[0]['aspect'] < 2.2738):
+        elif video[0]['aspect'] < 2.2738:  # sqrt(2.20*2.35)
             info['VideoAspect'] = "2.20"
-        else:
+        elif video[0]['aspect'] < 2.3749:  # sqrt(2.35*2.40)
             info['VideoAspect'] = "2.35"
-    elif (('bluray' or 'blu-ray' or 'brrip' or 'bdrip' or 'hddvd' or 'hd-dvd') in filename):
-        info['VideoResolution'] = '1080'
-    elif ('dvd' in filename) or (filename.endswith('.vob' or '.ifo')):
-        info['VideoResolution'] = '576'
+        elif video[0]['aspect'] < 2.4739:  # sqrt(2.40*2.55)
+            info['VideoAspect'] = "2.40"
+        elif video[0]['aspect'] < 2.6529:  # sqrt(2.55*2.76)
+            info['VideoAspect'] = "2.55"
+        else:
+            info['VideoAspect'] = "2.76"
     if audio:
         info['AudioCodec'] = audio[0]['codec']
         info['AudioChannels'] = audio[0]['channels']
