@@ -2,6 +2,7 @@
 
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
+from functools import wraps
 
 import xbmc
 
@@ -35,3 +36,21 @@ def set_skin_string(name, value):
     xbmc.executebuiltin("Skin.SetString(%s, %s)" % (name, value))
 
 
+def busy_dialog(func):
+    """
+    Decorator to show busy dialog while function is running
+    Only one of the decorated functions may run simultaniously
+    """
+
+    @wraps(func)
+    def decorator(self, *args, **kwargs):
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        try:
+            result = func(self, *args, **kwargs)
+        except Exception:
+            result = None
+        finally:
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+        return result
+
+    return decorator
