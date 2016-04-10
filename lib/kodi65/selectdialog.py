@@ -48,7 +48,7 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         pass
 
 
-def open_selectdialog(self, listitems):
+def open_selectdialog(listitems):
     """
     open selectdialog, return listitem dict and index
     """
