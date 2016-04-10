@@ -127,7 +127,7 @@ class ListItem(object):
     def set_resumetime(self, value):
         self.specials["resumetime"] = value
 
-# playlist_starting_track isspecial item_start
+# playlist_starting_track isspecial item_start isplayable
 
     def set_size(self, size):
         self.size = size
@@ -272,32 +272,33 @@ class ListItem(object):
                       "imdbnumber": info.getIMDBNumber(),
                       "mediatype": info.getMediaType(),
                       "year": info.getYear()}
-        self.properties = {"id": listitem.getProperty("id"),
-                           "artist_instrument": listitem.getProperty("artist_instrument"),
-                           "artist_style": listitem.getProperty("artist_style"),
-                           "artist_mood": listitem.getProperty("artist_mood"),
-                           "artist_born": listitem.getProperty("artist_born"),
-                           "artist_formed": listitem.getProperty("artist_formed"),
-                           "artist_description": listitem.getProperty("artist_description"),
-                           "artist_genre": listitem.getProperty("artist_genre"),
-                           "artist_died": listitem.getProperty("artist_died"),
-                           "artist_disbanded": listitem.getProperty("artist_disbanded"),
-                           "artist_yearsactive": listitem.getProperty("artist_yearsactive"),
-                           "artist_born": listitem.getProperty("artist_born"),
-                           "artist_died": listitem.getProperty("artist_died"),
-                           "album_description": listitem.getProperty("album_description"),
-                           "album_theme": listitem.getProperty("album_theme"),
-                           "album_mood": listitem.getProperty("album_mood"),
-                           "album_style": listitem.getProperty("album_style"),
-                           "album_type": listitem.getProperty("album_type"),
-                           "album_label": listitem.getProperty("album_label"),
-                           "album_artist": listitem.getProperty("album_artist"),
-                           "album_genre": listitem.getProperty("album_genre"),
-                           "album_title": listitem.getProperty("album_title"),
-                           "album_rating": listitem.getProperty("album_rating"),
-                           "album_userrating": listitem.getProperty("album_userrating"),
-                           "album_votes": listitem.getProperty("album_votes"),
-                           "album_releasetype": listitem.getProperty("album_releasetype")}
+        props = ["id",
+                 "artist_instrument",
+                 "artist_style",
+                 "artist_mood",
+                 "artist_born",
+                 "artist_formed",
+                 "artist_description",
+                 "artist_genre",
+                 "artist_died",
+                 "artist_disbanded",
+                 "artist_yearsactive",
+                 "artist_born",
+                 "artist_died",
+                 "album_description",
+                 "album_theme",
+                 "album_mood",
+                 "album_style",
+                 "album_type",
+                 "album_label",
+                 "album_artist",
+                 "album_genre",
+                 "album_title",
+                 "album_rating",
+                 "album_userrating",
+                 "album_votes",
+                 "album_releasetype"]
+        self.properties = {key: listitem.getProperty(key) for key in props}
 
     def movie_from_dbid(self, dbid):
         from LocalDB import local_db
