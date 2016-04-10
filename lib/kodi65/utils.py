@@ -5,6 +5,7 @@
 from functools import wraps
 
 import xbmc
+import xbmcgui
 
 import YDStreamExtractor
 from kodi65 import addon
@@ -61,3 +62,11 @@ def download_video(youtube_id):
             vid = YDStreamExtractor.getVideoInfo(youtube_id,
                                                  quality=1)
             YDStreamExtractor.handleDownload(vid)
+
+
+def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
+    xbmcgui.Dialog().notification(heading=header,
+                                  message=message,
+                                  icon=icon,
+                                  time=time,
+                                  sound=sound)
