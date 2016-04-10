@@ -6,6 +6,7 @@ from functools import wraps
 
 import xbmc
 
+import YDStreamExtractor
 from kodi65 import addon
 
 
@@ -54,3 +55,9 @@ def busy_dialog(func):
         return result
 
     return decorator
+
+
+def download_video(youtube_id):
+            vid = YDStreamExtractor.getVideoInfo(youtube_id,
+                                                 quality=1)
+            YDStreamExtractor.handleDownload(vid)

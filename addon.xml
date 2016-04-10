@@ -2,6 +2,7 @@
 <addon id="script.module.kodi65" name="Kodi65 Library" version="1.0.0" provider-name="Philipp Temminghoff (phil65)">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0"/>
+		<import addon="script.module.youtube.dl" version="14.519.1"/>
 	</requires>
 	<extension point="xbmc.python.module" library="lib" />
 	<extension point="xbmc.addon.metadata">
