@@ -59,9 +59,9 @@ def busy_dialog(func):
 
 
 def download_video(youtube_id):
-            vid = YDStreamExtractor.getVideoInfo(youtube_id,
-                                                 quality=1)
-            YDStreamExtractor.handleDownload(vid)
+    vid = YDStreamExtractor.getVideoInfo(youtube_id,
+                                         quality=1)
+    YDStreamExtractor.handleDownload(vid)
 
 
 def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
