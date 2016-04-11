@@ -20,6 +20,7 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.items = kwargs.get('listing')
+        self.header = kwargs.get('header')
         self.listitems = [i.get_listitem() for i in self.items] if self.items else []
         self.listitem = None
         self.index = -1
@@ -28,7 +29,7 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         self.list = self.getControl(C_LIST_DETAIL)
         self.getControl(C_LIST_SIMPLE).setVisible(False)
         self.getControl(C_BUTTON_GET_MORE).setVisible(False)
-        self.getControl(C_LABEL_HEADER).setLabel(addon.LANG(32151))
+        self.getControl(C_LABEL_HEADER).setLabel(self.header)
         self.list.addItems(self.listitems)
         self.setFocus(self.list)
 
@@ -48,12 +49,13 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         pass
 
 
-def open_selectdialog(listitems):
+def open_selectdialog(listitems, header):
     """
-    open selectdialog, return listitem dict and index
+    open selectdialog, return index
     """
     xbmc.executebuiltin("Dialog.Close(busydialog)")
     w = SelectDialog('DialogSelect.xml', addon.PATH,
-                     listing=listitems)
+                     listing=listitems,
+                     header=header)
     w.doModal()
     return w.listitem, w.index
