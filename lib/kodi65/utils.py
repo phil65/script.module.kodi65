@@ -3,6 +3,7 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 from functools import wraps
+import threading
 
 import xbmc
 import xbmcgui
@@ -56,6 +57,21 @@ def busy_dialog(func):
         return result
 
     return decorator
+
+
+def run_async(func):
+    """
+    Decorator to run a function in a separate thread
+    """
+    @wraps(func)
+    def async_func(*args, **kwargs):
+        func_hl = threading.Thread(target=func,
+                                   args=args,
+                                   kwargs=kwargs)
+        func_hl.start()
+        return func_hl
+
+    return async_func
 
 
 def download_video(youtube_id):
@@ -114,3 +130,8 @@ def format_time(time, time_format=None):
         return hour + " h " + minute + " min"
     else:
         return minute + " min"
+
+
+def input_userrating():
+    return xbmcgui.Dialog().select(heading=addon.LANG(32129),
+                                   list=[str(float(i * 0.5)) for i in xrange(1, 21)])
