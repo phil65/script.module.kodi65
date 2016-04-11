@@ -4,6 +4,7 @@
 # This program is Free Software see LICENSE file for details
 from functools import wraps
 import threading
+import json
 
 import xbmc
 import xbmcgui
@@ -18,6 +19,16 @@ def log(txt):
     message = u'%s: %s' % (addon.ID, txt)
     xbmc.log(msg=message.encode("utf-8", 'ignore'),
              level=xbmc.LOGDEBUG)
+
+
+def pp(string):
+    """
+    prettyprint json
+    """
+    log(json.dumps(string,
+                   sort_keys=True,
+                   indent=4,
+                   separators=(',', ': ')))
 
 
 def merge_dicts(*dict_args):
