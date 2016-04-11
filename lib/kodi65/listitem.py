@@ -18,6 +18,7 @@ class ListItem(object):
     ICON_OVERLAY_HD = 6         # Is on hard disk stored
 
     def __init__(self, label="", label2="", path="", infos={}, properties={}, size="", artwork={}):
+        self.type = "video"
         self.label = label
         self.label2 = label
         self.path = path
@@ -222,7 +223,7 @@ class ListItem(object):
         artwork = {k: v.replace("https://", "http://") for k, v in self.artwork.items() if v}
         listitem.setArt(artwork)
         infos = {k.lower(): v for k, v in self.infos.items() if v}
-        listitem.setInfo("video", infos)
+        listitem.setInfo(self.type, infos)
         for item in self.videoinfo:
             listitem.addStreamInfo("video", item)
         for item in self.audioinfo:
@@ -303,3 +304,10 @@ class ListItem(object):
     def movie_from_dbid(self, dbid):
         from LocalDB import local_db
         self.update_from_listitem(local_db.get_movie(dbid))
+
+
+class AudioItem(ListItem):
+
+    def __init__(self, *args, **kwargs):
+        super(AudioItem, self).__init__(*args, **kwargs)
+        self.type = "audio"
