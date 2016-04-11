@@ -93,3 +93,24 @@ def get_year(year_string):
     return last 4 chars of string
     """
     return year_string[:4] if year_string else ""
+
+
+def format_time(time, time_format=None):
+    """
+    get formatted time
+    time_format = h, m or None
+    """
+    try:
+        intTime = int(time)
+    except Exception:
+        return time
+    hour = str(intTime / 60)
+    minute = str(intTime % 60).zfill(2)
+    if time_format == "h":
+        return hour
+    elif time_format == "m":
+        return minute
+    elif intTime >= 60:
+        return hour + " h " + minute + " min"
+    else:
+        return minute + " min"
