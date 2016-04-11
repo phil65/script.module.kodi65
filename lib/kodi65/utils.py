@@ -181,3 +181,8 @@ def read_from_file(path, raw=False):
         log("failed to load textfile: " + path)
         return False
 
+
+def create_listitems(data=None, preload_images=0):
+    return [item.get_listitem() for item in data] if data else []
+
+
