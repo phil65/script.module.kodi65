@@ -351,7 +351,7 @@ class LocalDB(object):
             self.albums = self.get_albums()
         for item in online_list:
             for local_item in self.albums:
-                if not item["name"] == local_item["title"]:
+                if not item["label"] == local_item["title"]:
                     continue
                 data = kodijson.get_json(method="AudioLibrary.getAlbumDetails",
                                          params={"properties": ["thumbnail"], "albumid": local_item["albumid"]})
@@ -452,7 +452,7 @@ def media_streamdetails(filename, streamdetails):
         streams = []
         for i, item in enumerate(audio, start=1):
             language = item['language']
-            if language in streams and language == "und":
+            if language in streams or language == "und":
                 continue
             streams.append(language)
             streaminfo = {'AudioLanguage.%d' % i: language,
