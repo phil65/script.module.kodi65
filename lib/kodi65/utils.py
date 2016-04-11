@@ -70,3 +70,26 @@ def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
                                   icon=icon,
                                   time=time,
                                   sound=sound)
+
+
+def millify(n):
+    """
+    make large numbers human-readable, return string
+    """
+    millnames = [' ', '.000', ' ' + addon.LANG(32000), ' ' + addon.LANG(32001), ' ' + addon.LANG(32002)]
+    if not n or n <= 100:
+        return ""
+    n = float(n)
+    char_count = len(str(n))
+    millidx = (char_count / 3) - 1
+    if millidx == 3 or char_count == 9:
+        return '%.2f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
+    else:
+        return '%.0f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
+
+
+def get_year(year_string):
+    """
+    return last 4 chars of string
+    """
+    return year_string[:4] if year_string else ""
