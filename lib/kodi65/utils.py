@@ -5,9 +5,11 @@
 from functools import wraps
 import threading
 import json
+import os
 
 import xbmc
 import xbmcgui
+import xbmcvfs
 
 import YDStreamExtractor
 from kodi65 import addon
@@ -146,3 +148,36 @@ def format_time(time, time_format=None):
 def input_userrating():
     return xbmcgui.Dialog().select(heading=addon.LANG(32129),
                                    list=[str(float(i * 0.5)) for i in xrange(1, 21)])
+
+
+def save_to_file(content, filename, path):
+    """
+    dump json and save to *filename in *path
+    """
+    if not xbmcvfs.exists(path):
+        xbmcvfs.mkdirs(path)
+    text_file_path = os.path.join(path, filename + ".txt")
+    text_file = xbmcvfs.File(text_file_path, "w")
+    json.dump(content, text_file)
+    text_file.close()
+    return True
+
+
+def read_from_file(path, raw=False):
+    """
+    return data from file with *path
+    """
+    if not xbmcvfs.exists(path):
+        return False
+    try:
+        with open(path) as f:
+            # utils.log("opened textfile %s." % (path))
+            if not raw:
+                result = json.load(f)
+            else:
+                result = f.read()
+        return result
+    except Exception:
+        log("failed to load textfile: " + path)
+        return False
+
