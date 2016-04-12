@@ -6,6 +6,7 @@ from functools import wraps
 import threading
 import json
 import os
+import datetime
 
 import xbmc
 import xbmcgui
@@ -185,4 +186,28 @@ def read_from_file(path, raw=False):
 def create_listitems(data=None, preload_images=0):
     return [item.get_listitem() for item in data] if data else []
 
+
+def calculate_age(born, died=False):
+    """
+    calculate age based on born / died
+    display notification for birthday
+    return death age when already dead
+    """
+    if died:
+        ref_day = died.split("-")
+    elif born:
+        date = datetime.date.today()
+        ref_day = [date.year, date.month, date.day]
+    else:
+        return ""
+    actor_born = born.split("-")
+    base_age = int(ref_day[0]) - int(actor_born[0])
+    if len(actor_born) > 1:
+        diff_months = int(ref_day[1]) - int(actor_born[1])
+        diff_days = int(ref_day[2]) - int(actor_born[2])
+        if diff_months < 0 or (diff_months == 0 and diff_days < 0):
+            base_age -= 1
+        elif diff_months == 0 and diff_days == 0 and not died:
+            notify("%s (%i)" % (addon.LANG(32158), base_age))
+    return base_age
 
