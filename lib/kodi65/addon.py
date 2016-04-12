@@ -48,7 +48,7 @@ def set_global(setting_name, setting_value):
 
 
 def get_global(setting_name):
-    HOME.getProperty(setting_name)
+    return HOME.getProperty(setting_name)
 
 
 def clear_global(setting_name):
