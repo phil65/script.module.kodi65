@@ -7,6 +7,9 @@ import threading
 import json
 import os
 import datetime
+import time
+import hashlib
+import urllib2
 
 import xbmc
 import xbmcgui
@@ -219,3 +222,75 @@ def calculate_age(born, died=False):
             notify("%s (%i)" % (addon.LANG(32158), base_age))
     return base_age
 
+
+def get_http(url=None, headers=False):
+    """
+    fetches data from *url, returns it as a string
+    """
+    succeed = 0
+    if not headers:
+        headers = {'User-agent': 'Kodi/17.0 ( phil65@kodi.tv )'}
+    request = urllib2.Request(url)
+    for (key, value) in headers.iteritems():
+        request.add_header(key, value)
+    while (succeed < 2) and (not xbmc.abortRequested):
+        try:
+            response = urllib2.urlopen(request, timeout=3)
+            return response.read()
+        except Exception:
+            log("get_http: could not get data from %s" % url)
+            xbmc.sleep(1000)
+            succeed += 1
+    return None
+
+
+def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
+    """
+    get JSON response for *url, makes use of prop and file cache.
+    """
+    now = time.time()
+    hashed_url = hashlib.md5(url).hexdigest()
+    if folder:
+        cache_path = translate_path(os.path.join(addon.DATA_PATH, folder))
+    else:
+        cache_path = translate_path(os.path.join(addon.DATA_PATH))
+    cache_seconds = int(cache_days * 86400.0)
+    prop_time = addon.get_global(hashed_url + "_timestamp")
+    if prop_time and now - float(prop_time) < cache_seconds:
+        try:
+            prop = json.loads(addon.get_global(hashed_url))
+            if prop:
+                return prop
+        except Exception:
+            # utils.log("could not load prop data for %s" % url)
+            pass
+    path = os.path.join(cache_path, hashed_url + ".txt")
+    if xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
+        results = read_from_file(path)
+        # utils.log("loaded file for %s. time: %f" % (url, time.time() - now))
+    else:
+        response = get_http(url, headers)
+        try:
+            results = json.loads(response)
+            # utils.log("download %s. time: %f" % (url, time.time() - now))
+            save_to_file(results, hashed_url, cache_path)
+        except Exception:
+            log("Exception: Could not get new JSON data from %s. Tryin to fallback to cache" % url)
+            log(response)
+            results = read_from_file(path) if xbmcvfs.exists(path) else []
+    if not results:
+        return []
+    addon.set_global(hashed_url + "_timestamp", str(now))
+    addon.set_global(hashed_url, json.dumps(results))
+    return results
+
+
+def dict_to_windowprops(data=None, prefix="", window_id=10000):
+    window = xbmcgui.Window(window_id)
+    if not data:
+        return None
+    for (key, value) in data.iteritems():
+        if not value:
+            continue
+        value = unicode(value)
+        window.setProperty('%s%s' % (prefix, key), value)
