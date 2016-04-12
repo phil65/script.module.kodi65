@@ -187,6 +187,14 @@ def create_listitems(data=None, preload_images=0):
     return [item.get_listitem() for item in data] if data else []
 
 
+def translate_path(path):
+    return xbmc.translatePath(path).decode("utf-8")
+
+
+def get_infolabel(name):
+    return xbmc.getInfoLabel(name).decode("utf-8")
+
+
 def calculate_age(born, died=False):
     """
     calculate age based on born / died

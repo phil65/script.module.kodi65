@@ -15,7 +15,7 @@ import xbmcvfs
 from kodi65 import addon
 from kodi65 import utils
 
-THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video").decode("utf-8")
+THUMBS_CACHE_PATH = utils.translate_path("special://profile/Thumbnails/Video")
 IMAGE_PATH = os.path.join(addon.DATA_PATH, "images")
 
 
@@ -24,7 +24,7 @@ def blur(input_img, radius=25):
         return {}
     if not xbmcvfs.exists(IMAGE_PATH):
         xbmcvfs.mkdir(IMAGE_PATH)
-    input_img = xbmc.translatePath(urllib.unquote(input_img.encode("utf-8"))).decode("utf-8")
+    input_img = utils.translate_path(urllib.unquote(input_img.encode("utf-8")))
     input_img = input_img.replace("image://", "").rstrip("/")
     cachedthumb = xbmc.getCacheThumbName(input_img)
     filename = "%s-radius_%i.png" % (cachedthumb, radius)
@@ -37,11 +37,11 @@ def blur(input_img, radius=25):
             try:
                 if xbmcvfs.exists(cache_file):
                     utils.log("image already in xbmc cache: " + cache_file)
-                    img = PIL.Image.open(xbmc.translatePath(cache_file).decode("utf-8"))
+                    img = PIL.Image.open(utils.translate_path(cache_file))
                     break
                 elif xbmcvfs.exists(vid_cache_file):
                     utils.log("image already in xbmc video cache: " + vid_cache_file)
-                    img = PIL.Image.open(xbmc.translatePath(vid_cache_file).decode("utf-8"))
+                    img = PIL.Image.open(utils.translate_path(vid_cache_file))
                     break
                 else:
                     xbmcvfs.copy(input_img, targetfile)
