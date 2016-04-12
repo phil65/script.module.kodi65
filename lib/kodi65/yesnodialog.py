@@ -36,8 +36,6 @@ class ConfirmDialog(xbmcgui.WindowXMLDialog):
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
-        elif action == xbmcgui.ACTION_CONTEXT_MENU:
-            self.close()
 
     def onClick(self, control_id):
         self.index = control_id - ID_BUTTON_NO

@@ -36,8 +36,6 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
-        elif action == xbmcgui.ACTION_CONTEXT_MENU:
-            self.close()
 
     def onClick(self, control_id):
         if control_id in [C_LIST_SIMPLE, C_LIST_DETAIL]:
