@@ -9,6 +9,7 @@ import json
 import os
 import datetime
 import time
+import re
 import hashlib
 import urllib
 import urllib2
@@ -37,6 +38,13 @@ def pp(string):
                    sort_keys=True,
                    indent=4,
                    separators=(',', ': ')))
+
+
+def dictfind(lst, key, value):
+    for i, dic in enumerate(lst):
+        if dic[key] == value:
+            return dic
+    return ""
 
 
 def merge_dicts(*dict_args):
@@ -93,6 +101,31 @@ def run_async(func):
     return async_func
 
 
+def convert_youtube_url(raw_string):
+    """
+    get plugin playback URL for URL *raw_string
+    """
+    youtube_id = extract_youtube_id(raw_string)
+    if youtube_id:
+        return 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % youtube_id
+    return ""
+
+
+def extract_youtube_id(raw_string):
+    """
+    get youtube video id if from youtube URL
+    """
+    vid_ids = None
+    if raw_string and 'youtube.com/v' in raw_string:
+        vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', raw_string, re.DOTALL)
+    elif raw_string and 'youtube.com/watch' in raw_string:
+        vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', raw_string, re.DOTALL)
+    if vid_ids:
+        return vid_ids[0]
+    else:
+        return ""
+
+
 def download_video(youtube_id):
     vid = YDStreamExtractor.getVideoInfo(youtube_id,
                                          quality=1)
@@ -105,6 +138,24 @@ def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
                                   icon=icon,
                                   time=time,
                                   sound=sound)
+
+
+def reduce_list(items, key="job"):
+    """
+    TODO: refactor
+    """
+    ids = []
+    merged_items = []
+    for item in items:
+        id_ = item.get_property("id")
+        if id_ not in ids:
+            ids.append(id_)
+            merged_items.append(item)
+        else:
+            index = ids.index(id_)
+            if key in merged_items[index]:
+                merged_items[index][key] = merged_items[index][key] + " / " + item[key]
+    return merged_items
 
 
 def millify(n):
