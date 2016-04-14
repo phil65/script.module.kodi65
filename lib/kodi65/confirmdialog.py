@@ -11,6 +11,9 @@ from kodi65 import addon
 ID_BUTTON_YES = 11
 ID_BUTTON_NO = 10
 ID_BUTTON_EXTRA = 12
+ID_LABEL_HEADER = 1
+ID_LABEL_TEXT = 9
+ID_PROGRESS = 20
 
 
 class ConfirmDialog(xbmcgui.WindowXMLDialog):
@@ -20,17 +23,22 @@ class ConfirmDialog(xbmcgui.WindowXMLDialog):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.yeslabel = kwargs.get('yeslabel')
         self.nolabel = kwargs.get('nolabel')
+        self.header = kwargs.get('header')
+        self.text = kwargs.get('text')
         self.extrabutton = kwargs.get('extrabutton')
         self.index = -1
 
     def onInit(self):
         self.getControl(ID_BUTTON_YES).setLabel(self.yeslabel)
         self.getControl(ID_BUTTON_NO).setLabel(self.nolabel)
+        self.getControl(ID_LABEL_HEADER).setLabel(self.header)
+        self.getControl(ID_LABEL_TEXT).setText(self.text)
         if self.extrabutton:
             self.getControl(ID_BUTTON_EXTRA).setVisible(True)
             self.getControl(ID_BUTTON_EXTRA).setLabel(self.extrabutton)
         else:
             self.getControl(ID_BUTTON_EXTRA).setVisible(False)
+        self.getControl(ID_PROGRESS).setVisible(False)
         self.setFocusId(ID_BUTTON_NO)
 
     def onAction(self, action):
@@ -42,7 +50,7 @@ class ConfirmDialog(xbmcgui.WindowXMLDialog):
         self.close()
 
 
-def open_yesno(yeslabel=addon.LANG(107), nolabel=addon.LANG(106), extrabutton=False):
+def open_confirm(header="", text="", yeslabel=addon.LANG(107), nolabel=addon.LANG(106), extrabutton=False):
     """
     open yesnodialog, return -1 for cancelled, otherwise index (0-2)
     """
@@ -50,6 +58,8 @@ def open_yesno(yeslabel=addon.LANG(107), nolabel=addon.LANG(106), extrabutton=Fa
     w = ConfirmDialog('DialogConfirm.xml', addon.PATH,
                       yeslabel=yeslabel,
                       nolabel=nolabel,
+                      header=header,
+                      text=text,
                       extrabutton=extrabutton)
     w.doModal()
     return w.index
