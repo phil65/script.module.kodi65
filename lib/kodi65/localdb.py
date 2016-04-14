@@ -159,9 +159,9 @@ class LocalDB(object):
         """
         convert movie data to listitems
         """
-        trailer = PLUGIN_BASE + "playtrailer&&dbid=%s" % str(movie['movieid'])
+        trailer = PLUGIN_BASE + "playtrailer&&dbid=%s" % movie['movieid']
         if addon.setting("infodialog_onclick") != "false":
-            path = PLUGIN_BASE + 'extendedinfo&&dbid=%s' % str(movie['movieid'])
+            path = PLUGIN_BASE + 'extendedinfo&&dbid=%s' % movie['movieid']
         else:
             path = PLUGIN_BASE + 'playmovie&&dbid=%i' % movie['movieid']
         resume = movie['resume']
@@ -175,7 +175,7 @@ class LocalDB(object):
                             path=path)
         db_movie.set_infos({'title': movie.get('label'),
                             'file': movie.get('file'),
-                            'year': str(movie.get('year')),
+                            'year': movie.get('year'),
                             'writer': " / ".join(movie['writer']),
                             'mediatype': "movie",
                             'set': movie.get("set"),
@@ -185,7 +185,7 @@ class LocalDB(object):
                             'imdbnumber': movie.get("imdbnumber"),
                             'userrating': movie.get('userrating'),
                             'trailer': trailer,
-                            'rating': str(round(float(movie['rating']), 1)),
+                            'rating': round(float(movie['rating']), 1),
                             'director': " / ".join(movie.get('director')),
                             'writer': " / ".join(movie.get('writer')),
                             # "tag": " / ".join(movie['tag']),
@@ -218,14 +218,14 @@ class LocalDB(object):
                              path=path)
         db_tvshow.set_infos({'title': tvshow.get('label'),
                              'genre': " / ".join(tvshow.get('genre')),
-                             'rating': str(round(float(tvshow['rating']), 1)),
+                             'rating': round(float(tvshow['rating']), 1),
                              'mediatype': "tvshow",
                              'mpaa': tvshow.get("mpaa"),
                              'votes': tvshow.get("votes"),
                              'playcount': tvshow.get("playcount"),
                              'imdbnumber': tvshow.get("imdbnumber"),
                              # "tag": " / ".join(movie['tag']),
-                             'year': str(tvshow.get('year')),
+                             'year': tvshow.get('year'),
                              'originaltitle': tvshow.get('originaltitle')})
         db_tvshow.set_properties({'imdb_id': tvshow.get('imdbnumber'),
                                   'file': tvshow.get('file'),
