@@ -14,6 +14,9 @@ class ItemList(object):
     def __len__(self):
         return len(self.items)
 
+    def __iter__(self):
+        return iter(self.items)
+
     def add(self, item):
         self.items.append(item)
 
