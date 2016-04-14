@@ -17,7 +17,10 @@ class ListItem(object):
     ICON_OVERLAY_WATCHED = 5    # For seen files
     ICON_OVERLAY_HD = 6         # Is on hard disk stored
 
-    def __init__(self, label="", label2="", path="", infos={}, properties={}, size="", artwork={}):
+    def __init__(self, label="", label2="", path="", infos=None, properties=None, size="", artwork=None):
+        infos = infos if infos else {}
+        properties = properties if properties else {}
+        artwork = artwork if artwork else {}
         self.type = "video"
         self.label = label
         self.label2 = label
@@ -60,14 +63,14 @@ class ListItem(object):
     def __repr__(self):
         return "\n".join(["Label:", self.label,
                           "Label2:", self.label2,
-                          "InfoLabels:", self.dump_dict(self.infos),
-                          "Properties:", self.dump_dict(self.properties),
-                          "Artwork:", self.dump_dict(self.artwork),
-                          "Cast:", self.dump_dict(self.cast),
-                          "VideoStreams:", self.dump_dict(self.videoinfo),
-                          "AudioStreams:", self.dump_dict(self.audioinfo),
-                          "Subs:", self.dump_dict(self.subinfo),
-                          "Specials:", self.dump_dict(self.specials),
+                          "InfoLabels:", utils.dump_dict(self.infos),
+                          "Properties:", utils.dump_dict(self.properties),
+                          "Artwork:", utils.dump_dict(self.artwork),
+                          "Cast:", utils.dump_dict(self.cast),
+                          "VideoStreams:", utils.dump_dict(self.videoinfo),
+                          "AudioStreams:", utils.dump_dict(self.audioinfo),
+                          "Subs:", utils.dump_dict(self.subinfo),
+                          "Specials:", utils.dump_dict(self.specials),
                           "", ""])
 
     def __contains__(self, key):
@@ -85,12 +88,6 @@ class ListItem(object):
             return self.__getitem__(key)
         except KeyError:
             return fallback
-
-    def dump_dict(self, dct):
-        return json.dumps(dct,
-                          sort_keys=True,
-                          indent=4,
-                          separators=(',', ': '))
 
     def update_from_listitem(self, listitem):
         self.set_label(listitem.label)

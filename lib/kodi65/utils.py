@@ -29,15 +29,17 @@ def log(txt):
     xbmc.log(msg=message.encode("utf-8", 'ignore'),
              level=xbmc.LOGDEBUG)
 
+def dump_dict(dct):
+    return json.dumps(dct,
+                      sort_keys=True,
+                      indent=4,
+                      separators=(',', ': '))
 
 def pp(string):
     """
     prettyprint json
     """
-    log(json.dumps(string,
-                   sort_keys=True,
-                   indent=4,
-                   separators=(',', ': ')))
+    log(dump_dict(string))
 
 
 def dictfind(lst, key, value):
@@ -204,7 +206,7 @@ def format_time(time, time_format=None):
 
 def input_userrating():
     return xbmcgui.Dialog().select(heading=addon.LANG(32129),
-                                   list=[str(float(i * 0.5)) for i in xrange(1, 21)])
+                                   list=[str(i) for i in xrange(1, 11)])
 
 
 def save_to_file(content, filename, path):
