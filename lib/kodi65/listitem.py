@@ -4,7 +4,6 @@
 # This program is Free Software see LICENSE file for details
 
 import xbmcgui
-import json
 from kodi65 import utils
 
 

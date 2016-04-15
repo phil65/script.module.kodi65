@@ -174,6 +174,7 @@ class LocalDB(object):
         db_movie = ListItem(label=movie.get('label'),
                             path=path)
         db_movie.set_infos({'title': movie.get('label'),
+                            'dbid': movie['movieid'],
                             'file': movie.get('file'),
                             'year': movie.get('year'),
                             'writer': " / ".join(movie['writer']),
@@ -195,8 +196,7 @@ class LocalDB(object):
         db_movie.set_properties({'imdb_id': movie.get('imdbnumber'),
                                  'showlink': " / ".join(movie['showlink']),
                                  'percentplayed': played,
-                                 'resume': resumable,
-                                 'dbid': str(movie['movieid'])})
+                                 'resume': resumable})
         db_movie.set_artwork(movie['art'])
         db_movie.set_videoinfos(movie['streamdetails']["video"])
         db_movie.set_audioinfos(movie['streamdetails']["audio"])
@@ -217,6 +217,7 @@ class LocalDB(object):
         db_tvshow = ListItem(label=tvshow.get("label"),
                              path=path)
         db_tvshow.set_infos({'title': tvshow.get('label'),
+                             'dbid': tvshow['tvshowid'],
                              'genre': " / ".join(tvshow.get('genre')),
                              'rating': round(float(tvshow['rating']), 1),
                              'mediatype': "tvshow",
@@ -230,8 +231,7 @@ class LocalDB(object):
         db_tvshow.set_properties({'imdb_id': tvshow.get('imdbnumber'),
                                   'file': tvshow.get('file'),
                                   'watchedepisodes': tvshow.get('watchedepisodes'),
-                                  'totalepisodes': tvshow.get('episode'),
-                                  'dbid': tvshow['tvshowid']})
+                                  'totalepisodes': tvshow.get('episode')})
         db_tvshow.set_artwork(tvshow['art'])
         db_tvshow.set_cast(tvshow.get("cast"))
         return db_tvshow

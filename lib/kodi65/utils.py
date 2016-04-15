@@ -22,12 +22,14 @@ import YDStreamExtractor
 from kodi65 import addon
 
 
-def log(txt):
-    if isinstance(txt, str):
-        txt = txt.decode("utf-8", 'ignore')
-    message = u'%s: %s' % (addon.ID, txt)
-    xbmc.log(msg=message.encode("utf-8", 'ignore'),
-             level=xbmc.LOGDEBUG)
+def log(*args):
+    for arg in args:
+        if isinstance(arg, str):
+            arg = arg.decode("utf-8", 'ignore')
+        message = u'%s: %s' % (addon.ID, arg)
+        xbmc.log(msg=message.encode("utf-8", 'ignore'),
+                 level=xbmc.LOGDEBUG)
+
 
 def dump_dict(dct):
     return json.dumps(dct,

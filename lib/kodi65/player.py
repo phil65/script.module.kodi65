@@ -26,6 +26,7 @@ class VideoPlayer(xbmc.Player):
 
     @utils.busy_dialog
     def youtube_info_by_id(self, youtube_id):
+        YDStreamExtractor.disableDASHVideo(True)
         vid = YDStreamExtractor.getVideoInfo(youtube_id,
                                              quality=1)
         if not vid:
