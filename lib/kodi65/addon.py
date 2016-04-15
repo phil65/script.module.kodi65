@@ -37,10 +37,7 @@ def reload_addon():
 
 
 def LANG(label_id):
-    if 31000 <= label_id <= 33000:
-        return ADDON.getLocalizedString(label_id)
-    else:
-        return xbmc.getLocalizedString(label_id)
+    return ADDON.getLocalizedString(label_id) if 31000 <= label_id <= 33000 else xbmc.getLocalizedString(label_id)
 
 
 def set_global(setting_name, setting_value):
