@@ -177,6 +177,9 @@ class ListItem(object):
     def add_cast(self, value):
         self.cast.append(value)
 
+    def get_path(self):
+        return self.path
+
     def get_art(self, key):
         value = self.artwork.get(key)
         return value if value else ""
