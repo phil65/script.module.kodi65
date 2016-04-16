@@ -37,6 +37,7 @@ def dump_dict(dct):
                       indent=4,
                       separators=(',', ': '))
 
+
 def pp(string):
     """
     prettyprint json
