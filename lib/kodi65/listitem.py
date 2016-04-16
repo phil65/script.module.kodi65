@@ -212,13 +212,16 @@ class ListItem(object):
                                     label2=self.label2,
                                     path=self.path)
         props = {k: unicode(v) for k, v in self.properties.iteritems() if v}
+        infos = {k.lower(): v for k, v in self.infos.iteritems() if v}
+        if "duration" in infos:
+            props['duration(h)'] = utils.format_time(infos["duration"], "h")
+            props['duration(m)'] = utils.format_time(infos["duration"], "m")
         for key, value in props.iteritems():
             listitem.setProperty(key, unicode(value))
         for key, value in self.specials.iteritems():
             listitem.setProperty(key, unicode(value))
-        artwork = {k: v.replace("https://", "http://") for k, v in self.artwork.items() if v}
+        artwork = {k: v.replace("https://", "http://") for k, v in self.artwork.iteritems() if v}
         listitem.setArt(artwork)
-        infos = {k.lower(): v for k, v in self.infos.items() if v}
         listitem.setInfo(self.type, infos)
         for item in self.videoinfo:
             listitem.addStreamInfo("video", item)
