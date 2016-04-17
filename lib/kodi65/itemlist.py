@@ -36,6 +36,9 @@ class ItemList(object):
         self.items += other.items
         return self
 
+    def items(self):
+        return self.items
+
     def append(self, item):
         self.items.append(item)
 
