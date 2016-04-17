@@ -17,17 +17,14 @@ class ListItem(object):
     ICON_OVERLAY_HD = 6         # Is on hard disk stored
 
     def __init__(self, label="", label2="", path="", infos=None, properties=None, size="", artwork=None):
-        infos = infos if infos else {}
-        properties = properties if properties else {}
-        artwork = artwork if artwork else {}
         self.type = "video"
         self.label = label
-        self.label2 = label
+        self.label2 = label2
         self.path = path
         self.size = ""
-        self.properties = properties
-        self.artwork = artwork
-        self.infos = infos
+        self._properties = properties if properties else {}
+        self.artwork = artwork if artwork else {}
+        self._infos = infos if infos else {}
         self.videoinfo = []
         self.audioinfo = []
         self.subinfo = []
@@ -35,19 +32,19 @@ class ListItem(object):
         self.specials = {}
 
     def __setitem__(self, key, value):
-        self.properties[key] = value
+        self._properties[key] = value
 
     def __getitem__(self, key):
-        if key in self.properties:
-            return self.properties[key]
+        if key in self._properties:
+            return self._properties[key]
         elif key in self.artwork:
             return self.artwork[key]
-        elif key in self.infos:
-            return self.infos[key]
+        elif key in self._infos:
+            return self._infos[key]
         elif key == "properties":
-            return self.properties
+            return self._properties
         elif key == "infos":
-            return self.infos
+            return self._infos
         elif key == "artwork":
             return self.artwork
         elif key == "label":
@@ -62,8 +59,8 @@ class ListItem(object):
     def __repr__(self):
         return "\n".join(["Label:", self.label,
                           "Label2:", self.label2,
-                          "InfoLabels:", utils.dump_dict(self.infos),
-                          "Properties:", utils.dump_dict(self.properties),
+                          "InfoLabels:", utils.dump_dict(self._infos),
+                          "Properties:", utils.dump_dict(self._properties),
                           "Artwork:", utils.dump_dict(self.artwork),
                           "Cast:", utils.dump_dict(self.cast),
                           "VideoStreams:", utils.dump_dict(self.videoinfo),
@@ -73,11 +70,11 @@ class ListItem(object):
                           "", ""])
 
     def __contains__(self, key):
-        if key in self.properties:
+        if key in self._properties:
             return True
         elif key in self.artwork:
             return True
-        elif key in self.infos:
+        elif key in self._infos:
             return True
         elif key in ["properties", "infos", "artwork", "label", "label2", "path"]:
             return True
@@ -136,13 +133,13 @@ class ListItem(object):
         self.specials["node.target"] = target
 
     def set_infos(self, infos):
-        self.infos = infos
+        self._infos = infos
 
     def set_artwork(self, artwork):
         self.artwork = artwork
 
     def set_properties(self, properties):
-        self.properties = properties
+        self._properties = properties
 
     def set_cast(self, value):
         self.cast = value
@@ -157,22 +154,22 @@ class ListItem(object):
         self.subinfo = infos
 
     def update_properties(self, properties):
-        self.properties.update({k: v for k, v in properties.iteritems() if v})
+        self._properties.update({k: v for k, v in properties.iteritems() if v})
 
     def update_artwork(self, artwork):
         self.artwork.update({k: v for k, v in artwork.iteritems() if v})
 
     def update_infos(self, infos):
-        self.infos.update({k: v for k, v in infos.iteritems() if v})
+        self._infos.update({k: v for k, v in infos.iteritems() if v})
 
     def set_art(self, key, value):
         self.artwork[key] = value
 
     def set_property(self, key, value):
-        self.properties[key] = value
+        self._properties[key] = value
 
     def set_info(self, key, value):
-        self.infos[key] = value
+        self._infos[key] = value
 
     def add_cast(self, value):
         self.cast.append(value)
@@ -185,21 +182,21 @@ class ListItem(object):
         return value if value else ""
 
     def get_info(self, key):
-        value = self.infos.get(key)
+        value = self._infos.get(key)
         return value if value else ""
 
     def get_property(self, key):
-        value = self.properties.get(key)
+        value = self._properties.get(key)
         return value if value else ""
 
     def get_artwork(self):
         return {k: v for k, v in self.artwork.iteritems() if v}
 
     def get_infos(self):
-        return {k: v for k, v in self.infos.iteritems() if v}
+        return {k: v for k, v in self._infos.iteritems() if v}
 
     def get_properties(self):
-        return {k: v for k, v in self.properties.iteritems() if v}
+        return {k: v for k, v in self._properties.iteritems() if v}
 
     def add_videoinfo(self, info):
         self.videoinfo.append(info)
@@ -214,8 +211,8 @@ class ListItem(object):
         listitem = xbmcgui.ListItem(label=self.label,
                                     label2=self.label2,
                                     path=self.path)
-        props = {k: unicode(v) for k, v in self.properties.iteritems() if v}
-        infos = {k.lower(): v for k, v in self.infos.iteritems() if v}
+        props = {k: unicode(v) for k, v in self._properties.iteritems() if v}
+        infos = {k.lower(): v for k, v in self._infos.iteritems() if v}
         if "duration" in infos:
             props['duration(h)'] = utils.format_time(infos["duration"], "h")
             props['duration(m)'] = utils.format_time(infos["duration"], "m")
@@ -250,31 +247,31 @@ class ListItem(object):
         info = listitem.getVideoInfoTag()
         self.label = listitem.getLabel()
         self.path = info.getPath()
-        self.infos = {"dbid": info.getDbId(),
-                      "mediatype": info.getMediaType(),
-                      "plot": info.getPlot(),
-                      "plotoutline": info.getPlotOutline(),
-                      "tvshowtitle": info.getTVShowTitle(),
-                      "title": info.getTitle(),
-                      "votes": info.getVotes(),
-                      "season": info.getSeason(),
-                      "episode": info.getEpisode(),
-                      "rating": info.getRating(),
-                      "pictureurl": info.getPictureURL(),
-                      "cast": info.getCast(),
-                      "file": info.getFile(),
-                      "originaltitle": info.getOriginalTitle(),
-                      "tagline": info.getTagLine(),
-                      "genre": info.getGenre(),
-                      "director": info.getDirector(),
-                      "writer": info.getWritingCredits(),
-                      "lastplayed": info.getLastPlayed(),
-                      "premiered": info.getPremiered(),
-                      "firstaired": info.getFirstAired(),
-                      "playcount": info.getPlayCount(),
-                      "imdbnumber": info.getIMDBNumber(),
-                      "mediatype": info.getMediaType(),
-                      "year": info.getYear()}
+        self._infos = {"dbid": info.getDbId(),
+                       "mediatype": info.getMediaType(),
+                       "plot": info.getPlot(),
+                       "plotoutline": info.getPlotOutline(),
+                       "tvshowtitle": info.getTVShowTitle(),
+                       "title": info.getTitle(),
+                       "votes": info.getVotes(),
+                       "season": info.getSeason(),
+                       "episode": info.getEpisode(),
+                       "rating": info.getRating(),
+                       "pictureurl": info.getPictureURL(),
+                       "cast": info.getCast(),
+                       "file": info.getFile(),
+                       "originaltitle": info.getOriginalTitle(),
+                       "tagline": info.getTagLine(),
+                       "genre": info.getGenre(),
+                       "director": info.getDirector(),
+                       "writer": info.getWritingCredits(),
+                       "lastplayed": info.getLastPlayed(),
+                       "premiered": info.getPremiered(),
+                       "firstaired": info.getFirstAired(),
+                       "playcount": info.getPlayCount(),
+                       "imdbnumber": info.getIMDBNumber(),
+                       "mediatype": info.getMediaType(),
+                       "year": info.getYear()}
         props = ["id",
                  "artist_instrument",
                  "artist_style",
@@ -301,7 +298,7 @@ class ListItem(object):
                  "album_userrating",
                  "album_votes",
                  "album_releasetype"]
-        self.properties = {key: listitem.getProperty(key) for key in props}
+        self._properties = {key: listitem.getProperty(key) for key in props}
 
     def movie_from_dbid(self, dbid):
         from LocalDB import local_db
