@@ -220,7 +220,7 @@ class ListItem(object):
             listitem.setProperty(key, unicode(value))
         for key, value in self.specials.iteritems():
             listitem.setProperty(key, unicode(value))
-        artwork = {k: v.replace("https://", "http://") for k, v in self._artwork.iteritems() if v}
+        artwork = {k: v for k, v in self._artwork.iteritems() if v}
         listitem.setArt(artwork)
         listitem.setInfo(self.type, infos)
         for item in self.videoinfo:
