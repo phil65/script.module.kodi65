@@ -6,12 +6,12 @@
 
 class ItemList(object):
 
-    def __init__(self, items=None, content_type="", name=""):
-        self.items = items if items else []
+    def __init__(self, items=None, content_type="", name="", sorts=None, properties=None):
         self.name = name
         self.content_type = content_type
-        self.sorts = []
-        self.properties = []
+        self.items = items if items else []
+        self.sorts = sorts if sorts else []
+        self.properties = properties if properties else []
 
     def __len__(self):
         return len(self.items)
@@ -24,6 +24,9 @@ class ItemList(object):
 
     def __nonzero__(self):
         return len(self.items) > 0
+
+    def __str__(self):
+        return "Itemlist with length %s. Content type: %s" % (len(self.items), self.content_type)
 
     def __add__(self, other):
         return ItemList(items=self.items + other.items,
