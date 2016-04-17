@@ -23,7 +23,7 @@ class ListItem(object):
         self.path = path
         self.size = ""
         self._properties = properties if properties else {}
-        self.artwork = artwork if artwork else {}
+        self._artwork = artwork if artwork else {}
         self._infos = infos if infos else {}
         self.videoinfo = []
         self.audioinfo = []
@@ -37,8 +37,8 @@ class ListItem(object):
     def __getitem__(self, key):
         if key in self._properties:
             return self._properties[key]
-        elif key in self.artwork:
-            return self.artwork[key]
+        elif key in self._artwork:
+            return self._artwork[key]
         elif key in self._infos:
             return self._infos[key]
         elif key == "properties":
@@ -46,7 +46,7 @@ class ListItem(object):
         elif key == "infos":
             return self._infos
         elif key == "artwork":
-            return self.artwork
+            return self._artwork
         elif key == "label":
             return self.label
         elif key == "label2":
@@ -61,7 +61,7 @@ class ListItem(object):
                           "Label2:", self.label2,
                           "InfoLabels:", utils.dump_dict(self._infos),
                           "Properties:", utils.dump_dict(self._properties),
-                          "Artwork:", utils.dump_dict(self.artwork),
+                          "Artwork:", utils.dump_dict(self._artwork),
                           "Cast:", utils.dump_dict(self.cast),
                           "VideoStreams:", utils.dump_dict(self.videoinfo),
                           "AudioStreams:", utils.dump_dict(self.audioinfo),
@@ -72,7 +72,7 @@ class ListItem(object):
     def __contains__(self, key):
         if key in self._properties:
             return True
-        elif key in self.artwork:
+        elif key in self._artwork:
             return True
         elif key in self._infos:
             return True
@@ -136,7 +136,7 @@ class ListItem(object):
         self._infos = infos
 
     def set_artwork(self, artwork):
-        self.artwork = artwork
+        self._artwork = artwork
 
     def set_properties(self, properties):
         self._properties = properties
@@ -157,13 +157,13 @@ class ListItem(object):
         self._properties.update({k: v for k, v in properties.iteritems() if v})
 
     def update_artwork(self, artwork):
-        self.artwork.update({k: v for k, v in artwork.iteritems() if v})
+        self._artwork.update({k: v for k, v in artwork.iteritems() if v})
 
     def update_infos(self, infos):
         self._infos.update({k: v for k, v in infos.iteritems() if v})
 
     def set_art(self, key, value):
-        self.artwork[key] = value
+        self._artwork[key] = value
 
     def set_property(self, key, value):
         self._properties[key] = value
@@ -178,7 +178,7 @@ class ListItem(object):
         return self.path
 
     def get_art(self, key):
-        value = self.artwork.get(key)
+        value = self._artwork.get(key)
         return value if value else ""
 
     def get_info(self, key):
@@ -190,7 +190,7 @@ class ListItem(object):
         return value if value else ""
 
     def get_artwork(self):
-        return {k: v for k, v in self.artwork.iteritems() if v}
+        return {k: v for k, v in self._artwork.iteritems() if v}
 
     def get_infos(self):
         return {k: v for k, v in self._infos.iteritems() if v}
@@ -220,7 +220,7 @@ class ListItem(object):
             listitem.setProperty(key, unicode(value))
         for key, value in self.specials.iteritems():
             listitem.setProperty(key, unicode(value))
-        artwork = {k: v.replace("https://", "http://") for k, v in self.artwork.iteritems() if v}
+        artwork = {k: v.replace("https://", "http://") for k, v in self._artwork.iteritems() if v}
         listitem.setArt(artwork)
         listitem.setInfo(self.type, infos)
         for item in self.videoinfo:
