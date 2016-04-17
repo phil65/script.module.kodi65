@@ -10,6 +10,7 @@ from kodi65 import kodijson
 from kodi65 import addon
 from kodi65 import utils
 from kodi65.listitem import ListItem
+from kodi65.itemlist import ItemList
 
 PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 MOVIE_PROPS = ["title", "genre", "year", "rating", "director", "trailer",
@@ -52,7 +53,7 @@ class LocalDB(object):
             return None
         if not self.artists:
             self.artists = self.get_artists()
-        artists = []
+        artists = ItemList(content_type="artists")
         for simi_artist, kodi_artist in itertools.product(simi_artists, self.artists):
             if kodi_artist['musicbrainzartistid'] and kodi_artist['musicbrainzartistid'] == simi_artist['mbid']:
                 artists.append(kodi_artist)
@@ -125,7 +126,7 @@ class LocalDB(object):
         quotalist = sorted(quotalist,
                            key=lambda quota: quota[0],
                            reverse=True)
-        movies = []
+        movies = ItemList(content_type="movies")
         for i, list_movie in enumerate(quotalist):
             if comp_movie['movieid'] is not list_movie[1]:
                 newmovie = self.get_movie(list_movie[1])
@@ -140,10 +141,10 @@ class LocalDB(object):
         """
         data = kodijson.get_json(method="VideoLibrary.GetMovies",
                                  params={"properties": MOVIE_PROPS, "limits": {"end": limit}})
-        if "result" in data and "movies" in data["result"]:
-            return [self.handle_movies(item) for item in data["result"]["movies"]]
-        else:
+        if "result" not in data or "movies" not in data["result"]:
             return []
+        return ItemList(content_type="movies",
+                        items=[self.handle_movie(item) for item in data["result"]["movies"]])
 
     def get_tvshows(self, limit=10):
         """
@@ -153,9 +154,10 @@ class LocalDB(object):
                                  params={"properties": TV_PROPS, "limits": {"end": limit}})
         if "result" not in data or "tvshows" not in data["result"]:
             return []
-        return [self.handle_tvshows(item) for item in data["result"]["tvshows"]]
+        return ItemList(content_type="movies",
+                        items=[self.handle_tvshow(item) for item in data["result"]["tvshows"]])
 
-    def handle_movies(self, movie):
+    def handle_movie(self, movie):
         """
         convert movie data to listitems
         """
@@ -206,7 +208,7 @@ class LocalDB(object):
         db_movie.set_cast(movie.get("cast"))
         return db_movie
 
-    def handle_tvshows(self, tvshow):
+    def handle_tvshow(self, tvshow):
         """
         convert tvshow data to listitems
         """
@@ -243,7 +245,7 @@ class LocalDB(object):
         response = kodijson.get_json(method="VideoLibrary.GetMovieDetails",
                                      params={"properties": MOVIE_PROPS, "movieid": movie_id})
         if "result" in response and "moviedetails" in response["result"]:
-            return self.handle_movies(response["result"]["moviedetails"])
+            return self.handle_movie(response["result"]["moviedetails"])
         return {}
 
     def get_tvshow(self, tvshow_id):
@@ -253,7 +255,7 @@ class LocalDB(object):
         response = kodijson.get_json(method="VideoLibrary.GetTVShowDetails",
                                      params={"properties": TV_PROPS, "tvshowid": tvshow_id})
         if "result" in response and "tvshowdetails" in response["result"]:
-            return self.handle_tvshows(response["result"]["tvshowdetails"])
+            return self.handle_tvshow(response["result"]["tvshowdetails"])
         return {}
 
     def get_albums(self):
@@ -304,8 +306,8 @@ class LocalDB(object):
         get_list = kodijson.get_movies if media_type == "movie" else kodijson.get_tvshows
         self.get_compare_info(media_type,
                               get_list(["originaltitle", "imdbnumber"]))
-        local_items = []
-        remote_items = []
+        local_items = ItemList(content_type=media_type + "s")
+        remote_items = ItemList(content_type=media_type + "s")
         info = self.info[media_type]
         for item in items:
             index = False
