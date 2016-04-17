@@ -13,6 +13,8 @@ class ItemList(object):
         self._items = items if items else []
         self.sorts = sorts if sorts else []
         self._properties = properties if properties else []
+        self.local_first = True
+        self.sortkey = False
 
     def __len__(self):
         return len(self._items)
@@ -73,3 +75,19 @@ class ItemList(object):
     def get_property(self, key):
         value = self._properties.get(key)
         return value if value else ""
+
+    def sort(self):
+        if self.local_first:
+            local_items = [i for i in self._items if i.get_info("dbid")]
+            remote_items = [i for i in self._items if not i.get_info("dbid")]
+            local_items = sorted(local_items,
+                                 key=lambda k: k.get_info(self.sortkey),
+                                 reverse=True)
+            remote_items = sorted(remote_items,
+                                  key=lambda k: k.get_info(self.sortkey),
+                                  reverse=True)
+            self._items = local_items + remote_items
+        else:
+            self._items = sorted(self._items,
+                                 key=lambda k: k.get_info(self.sortkey),
+                                 reverse=True)
