@@ -22,6 +22,9 @@ class ItemList(object):
     def __getitem__(self, key):
         return self.items[key]
 
+    def __nonzero__(self):
+        return len(self.items) > 0
+
     def __add__(self, other):
         return ItemList(items=self.items + other.items,
                         content_type=self.content_type,
