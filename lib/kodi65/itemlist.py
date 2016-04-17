@@ -6,8 +6,8 @@
 
 class ItemList(object):
 
-    def __init__(self, items, content_type="", name=""):
-        self.items = items
+    def __init__(self, items=None, content_type="", name=""):
+        self.items = items if items else []
         self.name = name
         self.content_type = content_type
         self.sorts = []
