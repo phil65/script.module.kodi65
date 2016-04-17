@@ -19,6 +19,9 @@ class ItemList(object):
     def __iter__(self):
         return iter(self.items)
 
+    def __getitem__(self, key):
+        return self.items[key]
+
     def __add__(self, other):
         return ItemList(items=self.items + other.items,
                         content_type=self.content_type,
