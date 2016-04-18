@@ -3,6 +3,8 @@
 # Copyright (C) 2016 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+from kodi65 import utils
+
 
 class ItemList(object):
 
@@ -16,6 +18,8 @@ class ItemList(object):
         self._properties = properties if properties else []
         self.local_first = True
         self.sortkey = False
+        self.next_page_token = None
+        self.prev_page_token = None
 
     def __len__(self):
         return len(self._items)
@@ -42,6 +46,10 @@ class ItemList(object):
     def __iadd__(self, other):
         self._items += other.items
         return self
+
+    def prettify(self):
+        for item in self._items:
+            utils.log(item)
 
     def items(self):
         return self._items
@@ -81,7 +89,7 @@ class ItemList(object):
         return value if value else ""
 
     def create_listitems(self):
-        return [item.get_listitem() for item in self.data] if self.data else []
+        return [item.get_listitem() for item in self._items] if self._items else []
 
     def sort(self):
         if self.local_first:
