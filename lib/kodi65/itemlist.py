@@ -10,6 +10,7 @@ class ItemList(object):
         self.name = name
         self.content_type = content_type
         self.totals = totals
+        self.total_pages = 0
         self._items = items if items else []
         self.sorts = sorts if sorts else []
         self._properties = properties if properties else []
@@ -60,6 +61,9 @@ class ItemList(object):
     def set_totals(self, totals):
         self.totals = totals
 
+    def set_total_pages(self, total_pages):
+        self.total_pages = total_pages
+
     def add_sorts(self, sorts):
         self.sorts = sorts
 
@@ -75,6 +79,9 @@ class ItemList(object):
     def get_property(self, key):
         value = self._properties.get(key)
         return value if value else ""
+
+    def create_listitems(self):
+        return [item.get_listitem() for item in self.data] if self.data else []
 
     def sort(self):
         if self.local_first:
