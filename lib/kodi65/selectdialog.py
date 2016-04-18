@@ -22,7 +22,6 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         self.items = kwargs.get('listing')
         self.header = kwargs.get('header')
         self.listitems = [i.get_listitem() for i in self.items] if self.items else []
-        self.listitem = None
         self.index = -1
 
     def onInit(self):
@@ -40,7 +39,6 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
     def onClick(self, control_id):
         if control_id in [C_LIST_SIMPLE, C_LIST_DETAIL]:
             self.index = int(self.list.getSelectedPosition())
-            self.listitem = self.items[self.index]
             self.close()
 
     def onFocus(self, control_id):
@@ -56,4 +54,4 @@ def open(listitems, header):
                      listing=listitems,
                      header=header)
     w.doModal()
-    return w.listitem, w.index
+    return w.index
