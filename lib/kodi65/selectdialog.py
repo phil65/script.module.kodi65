@@ -15,7 +15,6 @@ C_LABEL_HEADER = 1
 
 
 class SelectDialog(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
@@ -31,10 +30,6 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         self.getControl(C_LABEL_HEADER).setLabel(self.header)
         self.list.addItems(self.listitems)
         self.setFocus(self.list)
-
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
 
     def onClick(self, control_id):
         if control_id in [C_LIST_SIMPLE, C_LIST_DETAIL]:

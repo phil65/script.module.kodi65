@@ -17,7 +17,6 @@ ID_PROGRESS = 20
 
 
 class ConfirmDialog(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
@@ -40,10 +39,6 @@ class ConfirmDialog(xbmcgui.WindowXMLDialog):
             self.getControl(ID_BUTTON_EXTRA).setVisible(False)
         self.getControl(ID_PROGRESS).setVisible(False)
         self.setFocusId(ID_BUTTON_NO)
-
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
 
     def onClick(self, control_id):
         self.index = control_id - ID_BUTTON_NO
