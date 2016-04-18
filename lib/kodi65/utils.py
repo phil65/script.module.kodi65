@@ -250,8 +250,8 @@ def create_listitems(data=None, preload_images=0):
     return [item.get_listitem() for item in data] if data else []
 
 
-def translate_path(path):
-    return xbmc.translatePath(path).decode("utf-8")
+def translate_path(*args):
+    return xbmc.translatePath(os.path.join(*args)).decode("utf-8")
 
 
 def get_infolabel(name):
@@ -310,10 +310,7 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     """
     now = time.time()
     hashed_url = hashlib.md5(url).hexdigest()
-    if folder:
-        cache_path = translate_path(os.path.join(addon.DATA_PATH, folder))
-    else:
-        cache_path = translate_path(os.path.join(addon.DATA_PATH))
+    cache_path = translate_path(addon.DATA_PATH, folder) if folder else translate_path(addon.DATA_PATH)
     cache_seconds = int(cache_days * 86400.0)
     prop_time = addon.get_global(hashed_url + "_timestamp")
     if prop_time and now - float(prop_time) < cache_seconds:
