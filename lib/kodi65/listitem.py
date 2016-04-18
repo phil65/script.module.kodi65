@@ -17,7 +17,6 @@ class ListItem(object):
     ICON_OVERLAY_HD = 6         # Is on hard disk stored
 
     def __init__(self, label="", label2="", path="", infos=None, properties=None, size="", artwork=None):
-        self.type = "video"
         self.label = label
         self.label2 = label2
         self.path = path
@@ -25,10 +24,6 @@ class ListItem(object):
         self._properties = properties if properties else {}
         self._artwork = artwork if artwork else {}
         self._infos = infos if infos else {}
-        self.videoinfo = []
-        self.audioinfo = []
-        self.subinfo = []
-        self.cast = []
         self.specials = {}
 
     def __setitem__(self, key, value):
@@ -62,10 +57,6 @@ class ListItem(object):
                           "InfoLabels:", utils.dump_dict(self._infos),
                           "Properties:", utils.dump_dict(self._properties),
                           "Artwork:", utils.dump_dict(self._artwork),
-                          "Cast:", utils.dump_dict(self.cast),
-                          "VideoStreams:", utils.dump_dict(self.videoinfo),
-                          "AudioStreams:", utils.dump_dict(self.audioinfo),
-                          "Subs:", utils.dump_dict(self.subinfo),
                           "Specials:", utils.dump_dict(self.specials),
                           "", ""])
 
@@ -92,10 +83,6 @@ class ListItem(object):
         self.update_properties(listitem.get_properties())
         self.update_artwork(listitem.get_artwork())
         self.update_infos(listitem.get_infos())
-        self.set_videoinfos(listitem.videoinfo)
-        self.set_audioinfos(listitem.audioinfo)
-        self.set_subinfos(listitem.subinfo)
-        self.set_cast(listitem.cast)
 
     def set_label(self, label):
         self.label = label
@@ -141,18 +128,6 @@ class ListItem(object):
     def set_properties(self, properties):
         self._properties = properties
 
-    def set_cast(self, value):
-        self.cast = value
-
-    def set_videoinfos(self, infos):
-        self.videoinfo = infos
-
-    def set_audioinfos(self, infos):
-        self.audioinfo = infos
-
-    def set_subinfos(self, infos):
-        self.subinfo = infos
-
     def update_properties(self, properties):
         self._properties.update({k: v for k, v in properties.iteritems() if v})
 
@@ -170,9 +145,6 @@ class ListItem(object):
 
     def set_info(self, key, value):
         self._infos[key] = value
-
-    def add_cast(self, value):
-        self.cast.append(value)
 
     def get_path(self):
         return self.path
@@ -197,15 +169,6 @@ class ListItem(object):
 
     def get_properties(self):
         return {k: v for k, v in self._properties.iteritems() if v}
-
-    def add_videoinfo(self, info):
-        self.videoinfo.append(info)
-
-    def add_audioinfo(self, info):
-        self.audioinfo.append(info)
-
-    def add_subinfo(self, info):
-        self.subinfo.append(info)
 
     def get_listitem(self):
         listitem = xbmcgui.ListItem(label=self.label,
@@ -243,6 +206,17 @@ class ListItem(object):
         for k, v in dct.iteritems():
             window.setProperty('%s%s' % (prefix, k), unicode(v))
 
+    def movie_from_dbid(self, dbid):
+        from LocalDB import local_db
+        self.update_from_listitem(local_db.get_movie(dbid))
+
+
+class AudioItem(ListItem):
+
+    def __init__(self, *args, **kwargs):
+        self.type = "audio"
+        super(AudioItem, self).__init__(*args, **kwargs)
+
     def from_listitem(self, listitem):
         info = listitem.getVideoInfoTag()
         self.label = listitem.getLabel()
@@ -251,26 +225,18 @@ class ListItem(object):
                        "mediatype": info.getMediaType(),
                        "plot": info.getPlot(),
                        "plotoutline": info.getPlotOutline(),
-                       "tvshowtitle": info.getTVShowTitle(),
                        "title": info.getTitle(),
                        "votes": info.getVotes(),
-                       "season": info.getSeason(),
-                       "episode": info.getEpisode(),
                        "rating": info.getRating(),
                        "pictureurl": info.getPictureURL(),
-                       "cast": info.getCast(),
                        "file": info.getFile(),
                        "originaltitle": info.getOriginalTitle(),
-                       "tagline": info.getTagLine(),
                        "genre": info.getGenre(),
-                       "director": info.getDirector(),
-                       "writer": info.getWritingCredits(),
                        "lastplayed": info.getLastPlayed(),
                        "premiered": info.getPremiered(),
                        "firstaired": info.getFirstAired(),
                        "playcount": info.getPlayCount(),
                        "imdbnumber": info.getIMDBNumber(),
-                       "mediatype": info.getMediaType(),
                        "year": info.getYear()}
         props = ["id",
                  "artist_instrument",
@@ -300,13 +266,82 @@ class ListItem(object):
                  "album_releasetype"]
         self._properties = {key: listitem.getProperty(key) for key in props}
 
-    def movie_from_dbid(self, dbid):
-        from LocalDB import local_db
-        self.update_from_listitem(local_db.get_movie(dbid))
 
-
-class AudioItem(ListItem):
+class VideoItem(ListItem):
 
     def __init__(self, *args, **kwargs):
-        super(AudioItem, self).__init__(*args, **kwargs)
-        self.type = "audio"
+        self.type = "video"
+        self.videoinfo = []
+        self.audioinfo = []
+        self.subinfo = []
+        self.cast = []
+        super(VideoItem, self).__init__(*args, **kwargs)
+
+    def __repr__(self):
+        super(VideoItem, self).__repr__()
+        return "\n".join(["Cast:", utils.dump_dict(self.cast),
+                          "VideoStreams:", utils.dump_dict(self.videoinfo),
+                          "AudioStreams:", utils.dump_dict(self.audioinfo),
+                          "Subs:", utils.dump_dict(self.subinfo),
+                          "", ""])
+
+    def from_listitem(self, listitem):
+        info = listitem.getVideoInfoTag()
+        self.label = listitem.getLabel()
+        self.path = info.getPath()
+        self._infos = {"dbid": info.getDbId(),
+                       "mediatype": info.getMediaType(),
+                       "plot": info.getPlot(),
+                       "plotoutline": info.getPlotOutline(),
+                       "tvshowtitle": info.getTVShowTitle(),
+                       "title": info.getTitle(),
+                       "votes": info.getVotes(),
+                       "season": info.getSeason(),
+                       "episode": info.getEpisode(),
+                       "rating": info.getRating(),
+                       "pictureurl": info.getPictureURL(),
+                       "cast": info.getCast(),
+                       "file": info.getFile(),
+                       "originaltitle": info.getOriginalTitle(),
+                       "tagline": info.getTagLine(),
+                       "genre": info.getGenre(),
+                       "director": info.getDirector(),
+                       "writer": info.getWritingCredits(),
+                       "lastplayed": info.getLastPlayed(),
+                       "premiered": info.getPremiered(),
+                       "firstaired": info.getFirstAired(),
+                       "playcount": info.getPlayCount(),
+                       "imdbnumber": info.getIMDBNumber(),
+                       "year": info.getYear()}
+
+    def update_from_listitem(self, listitem):
+        super(VideoItem, self).update_from_listitem(listitem)
+        self.set_videoinfos(listitem.videoinfo)
+        self.set_audioinfos(listitem.audioinfo)
+        self.set_subinfos(listitem.subinfo)
+        self.set_cast(listitem.cast)
+
+    def add_videoinfo(self, info):
+        self.videoinfo.append(info)
+
+    def add_audioinfo(self, info):
+        self.audioinfo.append(info)
+
+    def add_subinfo(self, info):
+        self.subinfo.append(info)
+
+    def add_cast(self, value):
+        self.cast.append(value)
+
+    def set_cast(self, value):
+        self.cast = value
+
+    def set_videoinfos(self, infos):
+        self.videoinfo = infos
+
+    def set_audioinfos(self, infos):
+        self.audioinfo = infos
+
+    def set_subinfos(self, infos):
+        self.subinfo = infos
+

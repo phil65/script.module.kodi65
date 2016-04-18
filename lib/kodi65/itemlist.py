@@ -8,6 +8,7 @@ import xbmcplugin
 import sys
 
 SORTS = {"none": xbmcplugin.SORT_METHOD_NONE,
+         "unsorted": xbmcplugin.SORT_METHOD_UNSORTED,
          "label": xbmcplugin.SORT_METHOD_LABEL,
          "label_ignore_the": xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
          "date": xbmcplugin.SORT_METHOD_DATE,
@@ -23,21 +24,20 @@ SORTS = {"none": xbmcplugin.SORT_METHOD_NONE,
          "album": xbmcplugin.SORT_METHOD_ALBUM,
          "album_ignore_the": xbmcplugin.SORT_METHOD_ALBUM_IGNORE_THE,
          "genre": xbmcplugin.SORT_METHOD_GENRE,
-         "video_year": xbmcplugin.SORT_METHOD_VIDEO_YEAR,
-         "video_rating": xbmcplugin.SORT_METHOD_VIDEO_RATING,
+         "year": xbmcplugin.SORT_METHOD_VIDEO_YEAR,
+         "rating": xbmcplugin.SORT_METHOD_VIDEO_RATING,
          "program_count": xbmcplugin.SORT_METHOD_PROGRAM_COUNT,
          "playlist_order": xbmcplugin.SORT_METHOD_PLAYLIST_ORDER,
          "episode": xbmcplugin.SORT_METHOD_EPISODE,
          "video_title": xbmcplugin.SORT_METHOD_VIDEO_TITLE,
-         "video_sort_title": xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE,
-         "video_sort_title_ignore_the": xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE_IGNORE_THE,
+         "sorttitle": xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE,
+         "sorttitle_ignore_the": xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE_IGNORE_THE,
          "productioncode": xbmcplugin.SORT_METHOD_PRODUCTIONCODE,
          "song_rating": xbmcplugin.SORT_METHOD_SONG_RATING,
-         "mpaa_rating": xbmcplugin.SORT_METHOD_MPAA_RATING,
+         "mpaa": xbmcplugin.SORT_METHOD_MPAA_RATING,
          "video_runtime": xbmcplugin.SORT_METHOD_VIDEO_RUNTIME,
          "studio": xbmcplugin.SORT_METHOD_STUDIO,
          "studio_ignore_the": xbmcplugin.SORT_METHOD_STUDIO_IGNORE_THE,
-         "unsorted": xbmcplugin.SORT_METHOD_UNSORTED,
          "bitrate": xbmcplugin.SORT_METHOD_BITRATE,
          "listeners": xbmcplugin.SORT_METHOD_LISTENERS,
          "country": xbmcplugin.SORT_METHOD_COUNTRY,
@@ -48,7 +48,7 @@ SORTS = {"none": xbmcplugin.SORT_METHOD_NONE,
          "playcount": xbmcplugin.SORT_METHOD_PLAYCOUNT,
          "channel": xbmcplugin.SORT_METHOD_CHANNEL,
          "date_taken": xbmcplugin.SORT_METHOD_DATE_TAKEN,
-         "video_user_rating": xbmcplugin.SORT_METHOD_VIDEO_USER_RATING,
+         "userrating": xbmcplugin.SORT_METHOD_VIDEO_USER_RATING,
          "song_user_rating": xbmcplugin.SORT_METHOD_SONG_USER_RATING}
 
 
@@ -118,7 +118,7 @@ class ItemList(object):
     def set_total_pages(self, total_pages):
         self.total_pages = total_pages
 
-    def add_sorts(self, sorts):
+    def set_sorts(self, sorts):
         self.sorts = sorts
 
     def set_properties(self, properties):

@@ -9,7 +9,7 @@ import itertools
 from kodi65 import kodijson
 from kodi65 import addon
 from kodi65 import utils
-from kodi65.listitem import ListItem
+from kodi65.listitem import VideoItem
 from kodi65.itemlist import ItemList
 
 PLUGIN_BASE = "plugin://script.extendedinfo/?info="
@@ -173,8 +173,8 @@ class LocalDB(object):
         else:
             resumable = "false"
             played = '0'
-        db_movie = ListItem(label=movie.get('label'),
-                            path=path)
+        db_movie = VideoItem(label=movie.get('label'),
+                             path=path)
         db_movie.set_infos({'title': movie.get('label'),
                             'dbid': movie['movieid'],
                             'file': movie.get('file'),
@@ -216,8 +216,8 @@ class LocalDB(object):
             path = PLUGIN_BASE + 'extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
         else:
             path = PLUGIN_BASE + 'action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % tvshow['tvshowid']
-        db_tvshow = ListItem(label=tvshow.get("label"),
-                             path=path)
+        db_tvshow = VideoItem(label=tvshow.get("label"),
+                              path=path)
         db_tvshow.set_infos({'title': tvshow.get('label'),
                              'dbid': tvshow['tvshowid'],
                              'genre': " / ".join(tvshow.get('genre')),
