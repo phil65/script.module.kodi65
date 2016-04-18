@@ -206,10 +206,6 @@ class ListItem(object):
         for k, v in dct.iteritems():
             window.setProperty('%s%s' % (prefix, k), unicode(v))
 
-    def movie_from_dbid(self, dbid):
-        from LocalDB import local_db
-        self.update_from_listitem(local_db.get_movie(dbid))
-
 
 class AudioItem(ListItem):
 
@@ -218,7 +214,7 @@ class AudioItem(ListItem):
         super(AudioItem, self).__init__(*args, **kwargs)
 
     def from_listitem(self, listitem):
-        info = listitem.getVideoInfoTag()
+        info = listitem.getAudioInfoTag()
         self.label = listitem.getLabel()
         self.path = info.getPath()
         self._infos = {"dbid": info.getDbId(),
@@ -236,7 +232,6 @@ class AudioItem(ListItem):
                        "premiered": info.getPremiered(),
                        "firstaired": info.getFirstAired(),
                        "playcount": info.getPlayCount(),
-                       "imdbnumber": info.getIMDBNumber(),
                        "year": info.getYear()}
         props = ["id",
                  "artist_instrument",
@@ -278,8 +273,9 @@ class VideoItem(ListItem):
         super(VideoItem, self).__init__(*args, **kwargs)
 
     def __repr__(self):
-        super(VideoItem, self).__repr__()
-        return "\n".join(["Cast:", utils.dump_dict(self.cast),
+        baseinfo = super(VideoItem, self).__repr__()
+        return "\n".join([baseinfo,
+                          "Cast:", utils.dump_dict(self.cast),
                           "VideoStreams:", utils.dump_dict(self.videoinfo),
                           "AudioStreams:", utils.dump_dict(self.audioinfo),
                           "Subs:", utils.dump_dict(self.subinfo),
@@ -345,3 +341,6 @@ class VideoItem(ListItem):
     def set_subinfos(self, infos):
         self.subinfo = infos
 
+    def movie_from_dbid(self, dbid):
+        from LocalDB import local_db
+        self.update_from_listitem(local_db.get_movie(dbid))
