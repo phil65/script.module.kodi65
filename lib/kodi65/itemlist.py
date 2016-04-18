@@ -58,7 +58,7 @@ class ItemList(object):
         self.name = name
         self.content_type = content_type
         self.totals = totals
-        self.total_pages = 0
+        self.total_pages = 1
         self._items = items if items else []
         self.sorts = sorts if sorts else []
         self._properties = properties if properties else []
