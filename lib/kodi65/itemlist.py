@@ -79,7 +79,7 @@ class ItemList(object):
     def __nonzero__(self):
         return len(self._items) > 0
 
-    def __str__(self):
+    def __repr__(self):
         return "Itemlist with length %s. Content type: %s" % (len(self._items), self.content_type)
 
     def __add__(self, other):
@@ -90,7 +90,7 @@ class ItemList(object):
                         properties=self._properties)
 
     def __iadd__(self, other):
-        self._items += other.items
+        self._items += other.items()
         return self
 
     def prettify(self):
