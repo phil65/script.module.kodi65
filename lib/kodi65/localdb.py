@@ -353,15 +353,15 @@ class LocalDB(object):
             self.albums = self.get_albums()
         for item in online_list:
             for local_item in self.albums:
-                if not item["label"] == local_item["title"]:
+                if not item.get_info("title") == local_item["title"]:
                     continue
                 data = kodijson.get_json(method="AudioLibrary.getAlbumDetails",
                                          params={"properties": ["thumbnail"], "albumid": local_item["albumid"]})
                 album = data["result"]["albumdetails"]
-                item["dbid"] = album["albumid"]
-                item["path"] = PLUGIN_BASE + 'playalbum&&dbid=%i' % album['albumid']
+                item.set_info("dbid", album["albumid"])
+                item.set_path(PLUGIN_BASE + 'playalbum&&dbid=%i' % album['albumid'])
                 if album["thumbnail"]:
-                    item.update({"thumb": album["thumbnail"]})
+                    item.update_artwork({"thumb": album["thumbnail"]})
                 break
         return online_list
 
