@@ -50,7 +50,7 @@ class ConfirmDialog(xbmcgui.WindowXMLDialog):
         self.close()
 
 
-def open_confirm(header="", text="", yeslabel=addon.LANG(107), nolabel=addon.LANG(106), extrabutton=False):
+def open(header="", text="", yeslabel=addon.LANG(107), nolabel=addon.LANG(106), extrabutton=False):
     """
     open yesnodialog, return -1 for cancelled, otherwise index (0-2)
     """
