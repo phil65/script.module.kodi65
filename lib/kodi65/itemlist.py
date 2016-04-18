@@ -4,6 +4,52 @@
 # This program is Free Software see LICENSE file for details
 
 from kodi65 import utils
+import xbmcplugin
+import sys
+
+SORTS = {"none": xbmcplugin.SORT_METHOD_NONE,
+         "label": xbmcplugin.SORT_METHOD_LABEL,
+         "label_ignore_the": xbmcplugin.SORT_METHOD_LABEL_IGNORE_THE,
+         "date": xbmcplugin.SORT_METHOD_DATE,
+         "size": xbmcplugin.SORT_METHOD_SIZE,
+         "file": xbmcplugin.SORT_METHOD_FILE,
+         "drive_type": xbmcplugin.SORT_METHOD_DRIVE_TYPE,
+         "tracknum": xbmcplugin.SORT_METHOD_TRACKNUM,
+         "duration": xbmcplugin.SORT_METHOD_DURATION,
+         "title": xbmcplugin.SORT_METHOD_TITLE,
+         "title_ignore_the": xbmcplugin.SORT_METHOD_TITLE_IGNORE_THE,
+         "artist": xbmcplugin.SORT_METHOD_ARTIST,
+         "artist_ignore_the": xbmcplugin.SORT_METHOD_ARTIST_IGNORE_THE,
+         "album": xbmcplugin.SORT_METHOD_ALBUM,
+         "album_ignore_the": xbmcplugin.SORT_METHOD_ALBUM_IGNORE_THE,
+         "genre": xbmcplugin.SORT_METHOD_GENRE,
+         "video_year": xbmcplugin.SORT_METHOD_VIDEO_YEAR,
+         "video_rating": xbmcplugin.SORT_METHOD_VIDEO_RATING,
+         "program_count": xbmcplugin.SORT_METHOD_PROGRAM_COUNT,
+         "playlist_order": xbmcplugin.SORT_METHOD_PLAYLIST_ORDER,
+         "episode": xbmcplugin.SORT_METHOD_EPISODE,
+         "video_title": xbmcplugin.SORT_METHOD_VIDEO_TITLE,
+         "video_sort_title": xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE,
+         "video_sort_title_ignore_the": xbmcplugin.SORT_METHOD_VIDEO_SORT_TITLE_IGNORE_THE,
+         "productioncode": xbmcplugin.SORT_METHOD_PRODUCTIONCODE,
+         "song_rating": xbmcplugin.SORT_METHOD_SONG_RATING,
+         "mpaa_rating": xbmcplugin.SORT_METHOD_MPAA_RATING,
+         "video_runtime": xbmcplugin.SORT_METHOD_VIDEO_RUNTIME,
+         "studio": xbmcplugin.SORT_METHOD_STUDIO,
+         "studio_ignore_the": xbmcplugin.SORT_METHOD_STUDIO_IGNORE_THE,
+         "unsorted": xbmcplugin.SORT_METHOD_UNSORTED,
+         "bitrate": xbmcplugin.SORT_METHOD_BITRATE,
+         "listeners": xbmcplugin.SORT_METHOD_LISTENERS,
+         "country": xbmcplugin.SORT_METHOD_COUNTRY,
+         "dateadded": xbmcplugin.SORT_METHOD_DATEADDED,
+         "fullpath": xbmcplugin.SORT_METHOD_FULLPATH,
+         "label_ignore_folders": xbmcplugin.SORT_METHOD_LABEL_IGNORE_FOLDERS,
+         "lastplayed": xbmcplugin.SORT_METHOD_LASTPLAYED,
+         "playcount": xbmcplugin.SORT_METHOD_PLAYCOUNT,
+         "channel": xbmcplugin.SORT_METHOD_CHANNEL,
+         "date_taken": xbmcplugin.SORT_METHOD_DATE_TAKEN,
+         "video_user_rating": xbmcplugin.SORT_METHOD_VIDEO_USER_RATING,
+         "song_user_rating": xbmcplugin.SORT_METHOD_SONG_USER_RATING}
 
 
 class ItemList(object):
@@ -90,6 +136,33 @@ class ItemList(object):
 
     def create_listitems(self):
         return [item.get_listitem() for item in self._items] if self._items else []
+
+    def set_plugin_list(self):
+        handle = int(sys.argv[1])
+        for item in self.sorts:
+            xbmcplugin.addSortMethod(handle, SORTS[item])
+
+        # these fixed sortmethods are only temporary
+
+        if self.content_type == "tvshows":
+            xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
+            xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+            xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
+        elif self.content_type == "episodes":
+            xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
+            xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+            xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
+        elif self.content_type == "movies":
+            xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
+            xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+            xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
+        if self.content_type:
+            xbmcplugin.setContent(handle, self.content_type)
+        items = [(i.get_path(), i.get_listitem(), bool(i.get_property("directory"))) for i in self._items]
+        xbmcplugin.addDirectoryItems(handle=handle,
+                                     items=items,
+                                     totalItems=len(items))
+        xbmcplugin.endOfDirectory(handle)
 
     def sort(self):
         if self.local_first:
