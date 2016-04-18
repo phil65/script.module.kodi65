@@ -13,7 +13,7 @@ import re
 import hashlib
 import urllib
 import urllib2
-
+import traceback
 import xbmc
 import xbmcgui
 import xbmcvfs
@@ -84,6 +84,8 @@ def busy_dialog(func):
             result = func(self, *args, **kwargs)
         except Exception:
             result = None
+            print traceback.format_exc()
+            notify("Error", "please contact add-on author")
         finally:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
         return result
