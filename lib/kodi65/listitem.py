@@ -77,6 +77,8 @@ class ListItem(object):
             return fallback
 
     def update_from_listitem(self, listitem):
+        if not listitem:
+            return None
         self.set_label(listitem.label)
         self.set_label2(listitem.label2)
         self.set_size(listitem.size)
@@ -215,19 +217,19 @@ class AudioItem(ListItem):
 
     def from_listitem(self, listitem):
         info = listitem.getAudioInfoTag()
-        self.label = listitem.getLabel()
-        self.path = info.getPath()
+        self.label = listitem.getLabel().decode("utf-8")
+        self.path = info.getPath().decode("utf-8")
         self._infos = {"dbid": info.getDbId(),
                        "mediatype": info.getMediaType(),
-                       "plot": info.getPlot(),
-                       "plotoutline": info.getPlotOutline(),
-                       "title": info.getTitle(),
+                       "plot": info.getPlot().decode("utf-8"),
+                       "plotoutline": info.getPlotOutline().decode("utf-8"),
+                       "title": info.getTitle().decode("utf-8"),
                        "votes": info.getVotes(),
                        "rating": info.getRating(),
                        "pictureurl": info.getPictureURL(),
-                       "file": info.getFile(),
-                       "originaltitle": info.getOriginalTitle(),
-                       "genre": info.getGenre(),
+                       "file": info.getFile().decode("utf-8"),
+                       "originaltitle": info.getOriginalTitle().decode("utf-8"),
+                       "genre": info.getGenre().decode("utf-8"),
                        "lastplayed": info.getLastPlayed(),
                        "premiered": info.getPremiered(),
                        "firstaired": info.getFirstAired(),
@@ -283,26 +285,26 @@ class VideoItem(ListItem):
 
     def from_listitem(self, listitem):
         info = listitem.getVideoInfoTag()
-        self.label = listitem.getLabel()
-        self.path = info.getPath()
+        self.label = listitem.getLabel().decode("utf-8")
+        self.path = info.getPath().decode("utf-8")
         self._infos = {"dbid": info.getDbId(),
                        "mediatype": info.getMediaType(),
-                       "plot": info.getPlot(),
-                       "plotoutline": info.getPlotOutline(),
-                       "tvshowtitle": info.getTVShowTitle(),
-                       "title": info.getTitle(),
+                       "plot": info.getPlot().decode("utf-8"),
+                       "plotoutline": info.getPlotOutline().decode("utf-8"),
+                       "tvshowtitle": info.getTVShowTitle().decode("utf-8"),
+                       "title": info.getTitle().decode("utf-8"),
                        "votes": info.getVotes(),
                        "season": info.getSeason(),
                        "episode": info.getEpisode(),
                        "rating": info.getRating(),
                        "pictureurl": info.getPictureURL(),
                        "cast": info.getCast(),
-                       "file": info.getFile(),
-                       "originaltitle": info.getOriginalTitle(),
-                       "tagline": info.getTagLine(),
-                       "genre": info.getGenre(),
-                       "director": info.getDirector(),
-                       "writer": info.getWritingCredits(),
+                       "file": info.getFile().decode("utf-8"),
+                       "originaltitle": info.getOriginalTitle().decode("utf-8"),
+                       "tagline": info.getTagLine().decode("utf-8"),
+                       "genre": info.getGenre().decode("utf-8"),
+                       "director": info.getDirector().decode("utf-8"),
+                       "writer": info.getWritingCredits().decode("utf-8"),
                        "lastplayed": info.getLastPlayed(),
                        "premiered": info.getPremiered(),
                        "firstaired": info.getFirstAired(),
@@ -311,6 +313,8 @@ class VideoItem(ListItem):
                        "year": info.getYear()}
 
     def update_from_listitem(self, listitem):
+        if not listitem:
+            return None
         super(VideoItem, self).update_from_listitem(listitem)
         self.set_videoinfos(listitem.videoinfo)
         self.set_audioinfos(listitem.audioinfo)
@@ -343,4 +347,6 @@ class VideoItem(ListItem):
 
     def movie_from_dbid(self, dbid):
         from LocalDB import local_db
+        if not dbid:
+            return None
         self.update_from_listitem(local_db.get_movie(dbid))
