@@ -17,6 +17,7 @@ import traceback
 import xbmc
 import xbmcgui
 import xbmcvfs
+import requests
 
 import YDStreamExtractor
 from kodi65 import addon
@@ -80,6 +81,7 @@ def busy_dialog(func):
     @wraps(func)
     def decorator(self, *args, **kwargs):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
+        result = func(self, *args, **kwargs)
         try:
             result = func(self, *args, **kwargs)
         except Exception:
@@ -283,25 +285,34 @@ def calculate_age(born, died=False):
     return base_age
 
 
-def get_http(url=None, headers=False):
+def get_http(url, headers=False):
     """
     fetches data from *url, returns it as a string
     """
     succeed = 0
     if not headers:
         headers = {'User-agent': 'Kodi/17.0 ( phil65@kodi.tv )'}
-    request = urllib2.Request(url)
-    for (key, value) in headers.iteritems():
-        request.add_header(key, value)
     while (succeed < 2) and (not xbmc.abortRequested):
         try:
-            response = urllib2.urlopen(request, timeout=3)
-            return response.read()
+            request = requests.get(url, headers=headers)
+            return request.text
         except Exception:
             log("get_http: could not get data from %s" % url)
             xbmc.sleep(1000)
             succeed += 1
     return None
+
+
+def post(url, values, headers, delete=False):
+    if delete:
+        request = requests.delete(url=url,
+                                  data=json.dumps(values),
+                                  headers=headers)
+    else:
+        request = requests.post(url=url,
+                                data=json.dumps(values),
+                                headers=headers)
+    return json.loads(request.text)
 
 
 def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
