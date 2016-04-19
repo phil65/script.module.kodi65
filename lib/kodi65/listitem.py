@@ -186,8 +186,10 @@ class ListItem(object):
         for key, value in self.specials.iteritems():
             listitem.setProperty(key, unicode(value))
         artwork = {k: v for k, v in self._artwork.iteritems() if v}
-        listitem.setArt(artwork)
-        listitem.setInfo(self.type, infos)
+        if artwork:
+            listitem.setArt(artwork)
+        if infos:
+            listitem.setInfo(self.type, infos)
         for item in self.videoinfo:
             listitem.addStreamInfo("video", item)
         for item in self.audioinfo:
