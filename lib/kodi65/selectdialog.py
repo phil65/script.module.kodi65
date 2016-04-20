@@ -29,9 +29,6 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         if not self.listitems:
             self.index == -1
             self.close()
-        elif len(self.listitems) == 1:
-            self.index == 0
-            self.close()
         self.list = self.getControl(C_LIST_DETAIL)
         self.getControl(C_LIST_DETAIL).setVisible(self.detailed)
         self.getControl(C_LIST_SIMPLE).setVisible(not self.detailed)
