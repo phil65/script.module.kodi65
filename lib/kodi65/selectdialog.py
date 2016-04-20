@@ -8,10 +8,11 @@ import xbmc
 
 from kodi65 import addon
 
+C_LABEL_HEADER = 1
 C_LIST_SIMPLE = 3
 C_LIST_DETAIL = 6
 C_BUTTON_GET_MORE = 5
-C_LABEL_HEADER = 1
+C_BUTTON_CANCEL = 7
 
 
 class SelectDialog(xbmcgui.WindowXMLDialog):
@@ -42,9 +43,12 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
     def onClick(self, control_id):
         if control_id in [C_LIST_SIMPLE, C_LIST_DETAIL]:
             self.index = int(self.list.getSelectedPosition())
+            self.close()
         elif control_id == C_BUTTON_GET_MORE:
             self.index = -2
-        self.close()
+            self.close()
+        elif control_id == C_BUTTON_CANCEL:
+            self.close()
 
     def onFocus(self, control_id):
         pass
