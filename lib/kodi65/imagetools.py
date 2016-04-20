@@ -91,8 +91,8 @@ def get_colors(img):
     except Exception:
         return "FFF0F0F0"
     data = []
-    for x in xrange(width/2):
-        data += [pixels[x*2, y*2] for y in xrange(height/2)]
+    for x in xrange(width / 2):
+        data += [pixels[x * 2, y * 2] for y in xrange(height / 2)]
     r = 0
     g = 0
     b = 0
@@ -110,11 +110,12 @@ def get_colors(img):
     g_avg = int(g / pixels)
     b_avg = int(b / pixels)
     avg = (r_avg + g_avg + b_avg) / 3
-    min_brightness = 130
+    min_brightness = 170
     if avg < min_brightness:
         diff = min_brightness - avg
-        for color in [r_avg, g_avg, b_avg]:
-            color = color + diff if color <= (255 - diff) else 255
+        r_avg = r_avg + diff if r_avg <= (255 - diff) else 255
+        g_avg = g_avg + diff if g_avg <= (255 - diff) else 255
+        b_avg = b_avg + diff if b_avg <= (255 - diff) else 255
     imagecolor = "FF%s%s%s" % (format(r_avg, '02x'), format(g_avg, '02x'), format(b_avg, '02x'))
     # utils.log("Average Color: " + imagecolor)
     return imagecolor
