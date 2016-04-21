@@ -3,7 +3,6 @@
 # Copyright (C) 2016 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from kodi65 import utils
 import xbmcplugin
 import sys
 
@@ -94,6 +93,7 @@ class ItemList(object):
         return self
 
     def prettify(self):
+        from kodi65 import utils
         for item in self._items:
             utils.log(item)
 
