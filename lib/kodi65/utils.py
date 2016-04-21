@@ -155,7 +155,7 @@ def reduce_list(items, key="job"):
     TODO: refactor
     """
     ids = []
-    merged_items = ItemList(content=items.content_type)
+    merged_items = ItemList(content_type=items.content_type)
     for item in items:
         id_ = item.get_property("id")
         if id_ not in ids:
@@ -348,7 +348,7 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
             log(response)
             results = read_from_file(path) if xbmcvfs.exists(path) else []
     if not results:
-        return []
+        return None
     addon.set_global(hashed_url + "_timestamp", str(now))
     addon.set_global(hashed_url, json.dumps(results))
     return results
