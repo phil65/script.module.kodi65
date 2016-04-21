@@ -10,6 +10,7 @@ class WindowMixin(object):
 
     def __init__(self, *args, **kwargs):
         super(WindowMixin, self).__init__()
+        self.cancelled = False
 
     def FocusedItem(self, control_id):
         try:
@@ -34,6 +35,10 @@ class WindowMixin(object):
             return True
         except Exception:
             return False
+
+    def exit(self):
+        self.cancelled = True
+        self.close()
 
 
 class WindowXML(xbmcgui.WindowXML, WindowMixin):
