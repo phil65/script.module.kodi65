@@ -306,8 +306,8 @@ class LocalDB(object):
         get_list = kodijson.get_movies if media_type == "movie" else kodijson.get_tvshows
         self.get_compare_info(media_type,
                               get_list(["originaltitle", "imdbnumber"]))
-        local_items = ItemList(content_type=media_type + "s")
-        remote_items = ItemList(content_type=media_type + "s")
+        local_items = []
+        remote_items = []
         info = self.info[media_type]
         for item in items:
             index = False
@@ -343,7 +343,7 @@ class LocalDB(object):
             remote_items = sorted(remote_items,
                                   key=lambda k: k.get_info(sortkey),
                                   reverse=True)
-        return local_items + remote_items
+        return ItemList(content_type=media_type + "s", items=local_items + remote_items)
 
     def compare_album_with_library(self, online_list):
         """
