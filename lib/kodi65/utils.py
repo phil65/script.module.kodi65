@@ -21,6 +21,7 @@ import requests
 
 import YDStreamExtractor
 from kodi65 import addon
+from kodi65.itemlist import ItemList
 
 
 def log(*args):
@@ -154,7 +155,7 @@ def reduce_list(items, key="job"):
     TODO: refactor
     """
     ids = []
-    merged_items = []
+    merged_items = ItemList(content=items.content_type)
     for item in items:
         id_ = item.get_property("id")
         if id_ not in ids:
