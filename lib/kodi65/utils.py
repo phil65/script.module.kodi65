@@ -212,8 +212,8 @@ def format_time(time, time_format=None):
 
 
 def input_userrating():
-    return xbmcgui.Dialog().select(heading=addon.LANG(32129),
-                                   list=[str(i) for i in xrange(1, 11)])
+    return xbmcgui.Dialog().select(heading=addon.LANG(38023),
+                                   list=[addon.LANG(10035)] + [str(i) for i in xrange(1, 11)])
 
 
 def save_to_file(content, filename, path):
