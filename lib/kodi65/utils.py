@@ -21,7 +21,6 @@ import requests
 
 import YDStreamExtractor
 from kodi65 import addon
-from kodi65.itemlist import ItemList
 
 
 def log(*args):
@@ -148,24 +147,6 @@ def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
                                   icon=icon,
                                   time=time,
                                   sound=sound)
-
-
-def reduce_list(items, key="job"):
-    """
-    TODO: refactor
-    """
-    ids = []
-    merged_items = ItemList(content_type=items.content_type)
-    for item in items:
-        id_ = item.get_property("id")
-        if id_ not in ids:
-            ids.append(id_)
-            merged_items.append(item)
-        else:
-            index = ids.index(id_)
-            if key in merged_items[index]:
-                merged_items[index][key] = merged_items[index][key] + " / " + item[key]
-    return merged_items
 
 
 def millify(n):

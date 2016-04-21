@@ -5,6 +5,7 @@
 
 import xbmcplugin
 import sys
+from kodi65 import utils
 
 SORTS = {"none": xbmcplugin.SORT_METHOD_NONE,
          "unsorted": xbmcplugin.SORT_METHOD_UNSORTED,
@@ -93,7 +94,6 @@ class ItemList(object):
         return self
 
     def prettify(self):
-        from kodi65 import utils
         for item in self._items:
             utils.log(item)
 
@@ -179,3 +179,21 @@ class ItemList(object):
             self._items = sorted(self._items,
                                  key=lambda k: k.get_info(self.sortkey),
                                  reverse=True)
+
+    def reduce(self, key="job"):
+        """
+        TODO: refactor
+        """
+        ids = []
+        merged_items = []
+        for item in self._items:
+            id_ = item.get_property("id")
+            if id_ not in ids:
+                ids.append(id_)
+                merged_items.append(item)
+            else:
+                index = ids.index(id_)
+                if key in merged_items[index]:
+                    merged_items[index][key] = merged_items[index][key] + " / " + item[key]
+        self._items = merged_items
+        return self
