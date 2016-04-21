@@ -50,9 +50,6 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         elif control_id == C_BUTTON_CANCEL:
             self.close()
 
-    def onFocus(self, control_id):
-        pass
-
 
 def open(listitems, header, detailed=True, extrabutton=False):
     """
