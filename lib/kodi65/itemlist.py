@@ -4,7 +4,6 @@
 # This program is Free Software see LICENSE file for details
 
 import xbmcplugin
-import sys
 from kodi65 import utils
 
 SORTS = {"none": xbmcplugin.SORT_METHOD_NONE,
@@ -137,8 +136,7 @@ class ItemList(object):
     def create_listitems(self):
         return [item.get_listitem() for item in self._items] if self._items else []
 
-    def set_plugin_list(self):
-        handle = int(sys.argv[1])
+    def set_plugin_list(self, handle):
         for item in self.sorts:
             xbmcplugin.addSortMethod(handle, SORTS[item])
 
