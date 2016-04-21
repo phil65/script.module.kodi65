@@ -70,6 +70,10 @@ class ListItem(object):
         elif key in ["properties", "infos", "artwork", "label", "label2", "path"]:
             return True
 
+    def __delitem__(self, key):
+        if key in self._properties:
+            del self._properties[key]
+
     def get(self, key, fallback=None):
         try:
             return self.__getitem__(key)
