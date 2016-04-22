@@ -194,6 +194,8 @@ class LocalDB(object):
                             # "tag": " / ".join(movie['tag']),
                             "genre": " / ".join(movie['genre']),
                             'plot': movie.get('plot'),
+                            'studio': movie.get('studio'),
+                            'mpaa': movie.get('mpaa'),
                             'originaltitle': movie.get('originaltitle')})
         db_movie.set_properties({'imdb_id': movie.get('imdbnumber'),
                                  'showlink': " / ".join(movie['showlink']),
@@ -224,9 +226,14 @@ class LocalDB(object):
                              'rating': round(float(tvshow['rating']), 1),
                              'mediatype': "tvshow",
                              'mpaa': tvshow.get("mpaa"),
+                             'plot': tvshow.get("plot"),
                              'votes': tvshow.get("votes"),
+                             'studio': tvshow.get("studio"),
+                             'premiered': tvshow.get("premiered"),
                              'playcount': tvshow.get("playcount"),
                              'imdbnumber': tvshow.get("imdbnumber"),
+                             'userrating': tvshow.get("userrating"),
+                             'duration': tvshow.get("duration"),
                              # "tag": " / ".join(movie['tag']),
                              'year': tvshow.get('year'),
                              'originaltitle': tvshow.get('originaltitle')})
