@@ -194,7 +194,8 @@ class LocalDB(object):
                             # "tag": " / ".join(movie['tag']),
                             "genre": " / ".join(movie['genre']),
                             'plot': movie.get('plot'),
-                            'studio': movie.get('studio'),
+                            'plotoutline': movie.get('plotoutline'),
+                            'studio': " / ".join(movie.get('studio')),
                             'mpaa': movie.get('mpaa'),
                             'originaltitle': movie.get('originaltitle')})
         db_movie.set_properties({'imdb_id': movie.get('imdbnumber'),
@@ -214,6 +215,7 @@ class LocalDB(object):
         """
         convert tvshow data to listitems
         """
+        utils.pp(tvshow)
         if addon.setting("infodialog_onclick") != "false":
             path = PLUGIN_BASE + 'extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
         else:
@@ -228,7 +230,7 @@ class LocalDB(object):
                              'mpaa': tvshow.get("mpaa"),
                              'plot': tvshow.get("plot"),
                              'votes': tvshow.get("votes"),
-                             'studio': tvshow.get("studio"),
+                             'studio': " / ".join(tvshow.get('studio')),
                              'premiered': tvshow.get("premiered"),
                              'playcount': tvshow.get("playcount"),
                              'imdbnumber': tvshow.get("imdbnumber"),
