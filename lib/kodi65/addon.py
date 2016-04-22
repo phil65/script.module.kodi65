@@ -24,7 +24,7 @@ def setting(setting_name):
 
 
 def set_setting(setting_name, string):
-    ADDON.setSetting(setting_name, string)
+    ADDON.setSetting(str(setting_name), str(string))
 
 
 def bool_setting(setting_name):

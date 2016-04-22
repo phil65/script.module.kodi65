@@ -59,5 +59,3 @@ class DialogXML(xbmcgui.WindowXMLDialog, WindowMixin):
 
     def onInit(self):
         self.window_id = xbmcgui.getCurrentWindowDialogId()
-
-
