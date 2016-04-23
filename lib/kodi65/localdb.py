@@ -215,7 +215,6 @@ class LocalDB(object):
         """
         convert tvshow data to listitems
         """
-        utils.pp(tvshow)
         if addon.setting("infodialog_onclick") != "false":
             path = PLUGIN_BASE + 'extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
         else:
