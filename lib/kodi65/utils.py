@@ -193,9 +193,13 @@ def format_time(time, time_format=None):
         return minute + " min"
 
 
-def input_userrating():
-    return xbmcgui.Dialog().select(heading=addon.LANG(38023),
-                                   list=[addon.LANG(10035)] + [str(i) for i in xrange(1, 11)])
+def input_userrating(preselect=-1):
+    index = xbmcgui.Dialog().select(heading=addon.LANG(38023),
+                                    list=[addon.LANG(10035)] + [str(i) for i in xrange(1, 11)],
+                                    preselect=preselect)
+    if index == preselect:
+        return -1
+    return index
 
 
 def save_to_file(content, filename, path):
