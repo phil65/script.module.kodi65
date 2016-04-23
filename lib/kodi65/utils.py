@@ -289,15 +289,17 @@ def get_http(url, headers=False):
     return None
 
 
-def post(url, values, headers, delete=False):
-    if delete:
-        request = requests.delete(url=url,
-                                  data=json.dumps(values),
-                                  headers=headers)
-    else:
-        request = requests.post(url=url,
-                                data=json.dumps(values),
-                                headers=headers)
+def post(url, values, headers):
+    request = requests.post(url=url,
+                            data=json.dumps(values),
+                            headers=headers)
+    return json.loads(request.text)
+
+
+def delete(url, values, headers):
+    request = requests.delete(url=url,
+                              data=json.dumps(values),
+                              headers=headers)
     return json.loads(request.text)
 
 
@@ -344,8 +346,6 @@ def dict_to_windowprops(data=None, prefix="", window_id=10000):
     if not data:
         return None
     for (key, value) in data.iteritems():
-        if not value:
-            continue
         value = unicode(value)
         window.setProperty('%s%s' % (prefix, key), value)
 
