@@ -5,6 +5,7 @@
 
 import xbmcplugin
 from kodi65 import utils
+from kodi65 import addon
 
 SORTS = {"none": xbmcplugin.SORT_METHOD_NONE,
          "unsorted": xbmcplugin.SORT_METHOD_UNSORTED,
@@ -160,23 +161,17 @@ class ItemList(object):
         xbmcplugin.addDirectoryItems(handle=handle,
                                      items=items,
                                      totalItems=len(items))
+        xbmcplugin.setPluginFanart(handle, addon.FANART)
         xbmcplugin.endOfDirectory(handle)
 
     def sort(self):
+        self._items = sorted(self._items,
+                             key=lambda k: k.get_info(self.sortkey),
+                             reverse=True)
         if self.local_first:
             local_items = [i for i in self._items if i.get_info("dbid")]
             remote_items = [i for i in self._items if not i.get_info("dbid")]
-            local_items = sorted(local_items,
-                                 key=lambda k: k.get_info(self.sortkey),
-                                 reverse=True)
-            remote_items = sorted(remote_items,
-                                  key=lambda k: k.get_info(self.sortkey),
-                                  reverse=True)
             self._items = local_items + remote_items
-        else:
-            self._items = sorted(self._items,
-                                 key=lambda k: k.get_info(self.sortkey),
-                                 reverse=True)
 
     def reduce(self, key="job"):
         """
