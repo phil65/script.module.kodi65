@@ -218,7 +218,7 @@ class ListItem(object):
 class AudioItem(ListItem):
 
     def __init__(self, *args, **kwargs):
-        self.type = "audio"
+        self.type = "music"
         super(AudioItem, self).__init__(*args, **kwargs)
 
     def from_listitem(self, listitem):
