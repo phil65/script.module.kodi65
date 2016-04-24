@@ -206,6 +206,7 @@ class ActionHandler():
         self.focus_actions = {}
         self.action_maps = {}
         self.context_actions = {}
+        self.info_actions = {}
         self.clicks_by_type = {}
 
     def click(self, button_ids):
@@ -237,6 +238,17 @@ class ActionHandler():
                     self.context_actions[mediatype] = f
             else:
                 self.context_actions[mediatypes] = f
+            return f
+
+        return decorator
+
+    def info(self, mediatypes):
+        def decorator(f):
+            if isinstance(mediatypes, list):
+                for mediatype in mediatypes:
+                    self.info_actions[mediatype] = f
+            else:
+                self.info_actions[mediatypes] = f
             return f
 
         return decorator
@@ -289,14 +301,18 @@ class ActionHandler():
     def serve_action(self, action, control_id, wnd):
         action_id = action.getId()
         wnd.action_id = action_id
-        if action_id == xbmcgui.ACTION_CONTEXT_MENU:
+        if action_id in [ACTIONS["contextmenu"], ACTIONS["info"]]:
             listitem = self.get_listitem(wnd, control_id)
             if listitem:
                 media_type = listitem.getVideoInfoTag().getMediaType()
                 if media_type:
-                    ctx_action = self.context_actions.get(media_type)
-                    if ctx_action:
-                        ctx_action(wnd, control_id)
+                    action = None
+                    if action_id == ACTIONS["contextmenu"]:
+                        action = self.context_actions.get(media_type)
+                    else:
+                        action = self.info_actions.get(media_type)
+                    if action:
+                        action(wnd, control_id)
         if action_id not in self.action_maps:
             return None
         dct = self.action_maps[action_id]
