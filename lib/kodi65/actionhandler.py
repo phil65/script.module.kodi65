@@ -282,9 +282,6 @@ class ActionHandler():
         listitem = self.get_listitem(wnd, control_id)
         if listitem:
             media_type = listitem.getVideoInfoTag().getMediaType()
-            import xbmc
-            xbmc.log("TESTETSTEST")
-            xbmc.log(str(media_type))
             if media_type:
                 action = self.clicks_by_type.get(media_type)
                 if action:
