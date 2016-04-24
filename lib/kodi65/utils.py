@@ -110,6 +110,12 @@ def run_async(func):
     return async_func
 
 
+def contextmenu(options):
+    index = xbmcgui.Dialog().contextmenu(list=[i[1] for i in options])
+    if index > -1:
+        return [i[0] for i in options][index]
+
+
 def convert_youtube_url(raw_string):
     """
     get plugin playback URL for URL *raw_string
