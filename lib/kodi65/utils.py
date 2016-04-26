@@ -317,6 +317,9 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     hashed_url = hashlib.md5(url).hexdigest()
     cache_path = translate_path(addon.DATA_PATH, folder) if folder else translate_path(addon.DATA_PATH)
     cache_seconds = int(cache_days * 86400.0)
+    if not cache_days:
+        addon.clear_global(hashed_url)
+        addon.clear_global(hashed_url + "_timestamp")
     prop_time = addon.get_global(hashed_url + "_timestamp")
     if prop_time and now - float(prop_time) < cache_seconds:
         try:
