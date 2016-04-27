@@ -134,6 +134,10 @@ class DialogBaseList(object):
     @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")
     def previous_menu(self, control_id):
+        """
+        close the currently active dialog
+        can also get overridden by skinners per control by setting a window prop
+        """
         onback = self.getProperty("%i_onback" % control_id)
         if onback:
             xbmc.executebuiltin(onback)
@@ -142,6 +146,9 @@ class DialogBaseList(object):
 
     @ch.action("previousmenu", "*")
     def exit_script(self, control_id):
+        """
+        completely exit script
+        """
         self.exit()
 
     @ch.action("left", "*")
@@ -149,6 +156,9 @@ class DialogBaseList(object):
     @ch.action("up", "*")
     @ch.action("down", "*")
     def save_position(self, control_id):
+        """
+        save position for any navigation keypress
+        """
         self.position = self.getCurrentListPosition()
 
     def search(self, label):
@@ -201,6 +211,9 @@ class DialogBaseList(object):
         self.update()
 
     def go_to_next_page(self):
+        """
+        go to the next page (for paginated results)
+        """
         self.get_column()
         if self.page < self.total_pages:
             self.page += 1
@@ -209,6 +222,9 @@ class DialogBaseList(object):
             self.update()
 
     def go_to_prev_page(self):
+        """
+        go to the previous page (for paginated results)
+        """
         self.get_column()
         if self.page > 1:
             self.page -= 1
@@ -217,11 +233,17 @@ class DialogBaseList(object):
             self.update()
 
     def get_column(self):
+        """
+        save the column of the currently focused item
+        """
         col = xbmc.getInfoLabel("Container(%s).Column" % self.getCurrentContainerId())
         self.column = int(col) if col != "" else None
 
     @utils.busy_dialog
     def update(self, force_update=False):
+        """
+        complete refresh of both content and ui
+        """
         self.update_content(force_update=force_update)
         self.update_ui()
 
@@ -243,6 +265,12 @@ class DialogBaseList(object):
         return True
 
     def choose_filter(self, filter_code, header, options):
+        """
+        open dialog and let user choose filter from *options
+        filter gets removed in case value is empty
+        filter_code: filter code from API
+        options: list of tuples with 2 items each: first is value, second is label
+        """
         values = [i[0] for i in options]
         labels = [i[1] for i in options]
         index = xbmcgui.Dialog().select(heading=addon.LANG(header),
@@ -256,6 +284,9 @@ class DialogBaseList(object):
                         label=labels[index])
 
     def toggle_filter(self, filter_code):
+        """
+        automatically add / remove filter with *filter_code
+        """
         index = self.find_filter_position(filter_code)
         if index > -1:
             del self.filters[index]
@@ -263,18 +294,31 @@ class DialogBaseList(object):
             pass  # add filter...
 
     def find_filter_position(self, filter_code):
+        """
+        find position of specific filter in filter list
+        """
         for i, item in enumerate(self.filters):
             if item["type"] == filter_code:
                 return i
         return -1
 
     def remove_filter(self, filter_code):
+        """
+        remove filter with specific filter_code from filter list
+        """
         index = self.find_filter_position(filter_code)
         if index > -1:
             del self.filters[index]
         self.reset()
 
     def add_filter(self, key, value, label, typelabel="", force_overwrite=False, reset=True):
+        """
+        add a filter to the filter list
+        a filter consists of a key and value (for api call), and label as well as
+        typelabel for displaying in UI.
+        *reset updates the container after modifying filters
+        *force_overwrite is used for filters which do not support ANDing
+        """
         if not value:
             return False
         new_filter = {"id": str(value),
