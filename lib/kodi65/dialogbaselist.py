@@ -249,9 +249,30 @@ class DialogBaseList(object):
                                         list=labels)
         if index == -1:
             return None
+        if not values[index]:
+            self.remove_filter(filter_code)
         self.add_filter(key=filter_code,
                         value=values[index],
                         label=labels[index])
+
+    def toggle_filter(self, filter_code):
+        index = self.find_filter_position(filter_code)
+        if index > -1:
+            del self.filters[index]
+        else:
+            pass  # add filter...
+
+    def find_filter_position(self, filter_code):
+        for i, item in enumerate(self.filters):
+            if item["type"] == filter_code:
+                return i
+        return -1
+
+    def remove_filter(self, filter_code):
+        index = self.find_filter_position(filter_code)
+        if index > -1:
+            del self.filters[index]
+        self.reset()
 
     def add_filter(self, key, value, label, typelabel="", force_overwrite=False, reset=True):
         if not value:
@@ -262,11 +283,7 @@ class DialogBaseList(object):
                       "label": label}
         if new_filter in self.filters:
             return False
-        index = -1
-        for i, item in enumerate(self.filters):
-            if item["type"] == key:
-                index = i
-                break
+        index = self.find_filter_position(key)
         if index == -1:
             self.filters.append(new_filter)
             if reset:
