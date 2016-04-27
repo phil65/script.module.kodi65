@@ -436,26 +436,7 @@ def media_streamdetails(filename, streamdetails):
         else:
             info['videoresolution'] = ""
         info['VideoCodec'] = str(video[0]['codec'])
-        if video[0]['aspect'] < 1.3499:  # sqrt(1.33*1.37)
-            info['VideoAspect'] = "1.33"
-        elif video[0]['aspect'] < 1.5080:  # sqrt(1.37*1.66)
-            info['VideoAspect'] = "1.37"
-        elif video[0]['aspect'] < 1.7190:  # sqrt(1.66*1.78)
-            info['VideoAspect'] = "1.66"
-        elif video[0]['aspect'] < 1.8147:  # sqrt(1.78*1.85)
-            info['VideoAspect'] = "1.78"
-        elif video[0]['aspect'] < 2.0174:  # sqrt(1.85*2.20)
-            info['VideoAspect'] = "1.85"
-        elif video[0]['aspect'] < 2.2738:  # sqrt(2.20*2.35)
-            info['VideoAspect'] = "2.20"
-        elif video[0]['aspect'] < 2.3749:  # sqrt(2.35*2.40)
-            info['VideoAspect'] = "2.35"
-        elif video[0]['aspect'] < 2.4739:  # sqrt(2.40*2.55)
-            info['VideoAspect'] = "2.40"
-        elif video[0]['aspect'] < 2.6529:  # sqrt(2.55*2.76)
-            info['VideoAspect'] = "2.55"
-        else:
-            info['VideoAspect'] = "2.76"
+        info["VideoAspect"] = select_aspectratio(video[0]['aspect'])
     if audio:
         info['AudioCodec'] = audio[0]['codec']
         info['AudioChannels'] = audio[0]['channels']
@@ -477,5 +458,30 @@ def media_streamdetails(filename, streamdetails):
             subs.append(language)
             info.update({'SubtitleLanguage.%d' % i: language})
     return info
+
+
+def select_aspectratio(aspect):
+    # see StreamDetails.cpp
+    aspect = float(aspect)
+    if aspect < 1.3499:  # sqrt(1.33*1.37)
+        return "1.33"
+    elif aspect < 1.5080:  # sqrt(1.37*1.66)
+        return "1.37"
+    elif aspect < 1.7190:  # sqrt(1.66*1.78)
+        return "1.66"
+    elif aspect < 1.8147:  # sqrt(1.78*1.85)
+        return "1.78"
+    elif aspect < 2.0174:  # sqrt(1.85*2.20)
+        return "1.85"
+    elif aspect < 2.2738:  # sqrt(2.20*2.35)
+        return "2.20"
+    elif aspect < 2.3749:  # sqrt(2.35*2.40)
+        return "2.35"
+    elif aspect < 2.4739:  # sqrt(2.40*2.55)
+        return "2.40"
+    elif aspect < 2.6529:  # sqrt(2.55*2.76)
+        return "2.55"
+    else:
+        return "2.76"
 
 local_db = LocalDB()
