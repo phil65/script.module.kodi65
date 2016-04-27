@@ -77,24 +77,39 @@ class DialogBaseList(object):
             self.go_to_prev_page()
 
     def close(self):
+        """
+        save viewtype and last focusposition
+        """
         addon.set_setting("viewtype_selection", str(self.getCurrentContainerId()))
         self.last_position = self.getCurrentListPosition()
         super(DialogBaseList, self).close()
 
     def set_sort(self, sort):
+        """
+        set sort method to *sort
+        """
         self.sort = sort
         self.verify_sort()
         self.sort_label = self.SORTS[self.get_sort_key()][self.sort]
 
     def verify_sort(self):
+        """
+        check if sort is valid. If not, change to default.
+        """
         if self.sort not in [i for i in self.SORTS[self.get_sort_key()].keys()]:
             self.set_sort(self.get_default_sort())
 
     def get_sort_key(self):
+        """
+        get key used for sorting
+        """
         return self.type
 
     @ch.click(ID_BUTTON_TOGGLETYPE)
     def toggle_type(self, control_id):
+        """
+        toggle type
+        """
         self.filters = []
         self.type = self.TYPES[self.TYPES.index(self.type) - 1]
         self.verify_sort()
@@ -102,6 +117,9 @@ class DialogBaseList(object):
 
     @ch.click(ID_BUTTON_RESETFILTERS)
     def reset_filters(self, control_id):
+        """
+        reset filters, show selectdialog if filtercount > 1
+        """
         if len(self.filters) > 1:
             listitems = ["%s: %s" % (f["typelabel"], f["label"]) for f in self.filters]
             listitems.append(addon.LANG(32078))
@@ -119,6 +137,9 @@ class DialogBaseList(object):
 
     @ch.click(ID_BUTTON_SEARCH)
     def open_search(self, control_id):
+        """
+        open search dialog, update list with search results
+        """
         if addon.bool_setting("classic_search"):
             result = xbmcgui.Dialog().input(heading=addon.LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
@@ -162,6 +183,9 @@ class DialogBaseList(object):
         self.position = self.getCurrentListPosition()
 
     def search(self, label):
+        """
+        set search string and update the container
+        """
         if not label:
             return None
         self.search_str = label
@@ -169,6 +193,9 @@ class DialogBaseList(object):
         self.reset("search")
 
     def set_filter_label(self):
+        """
+        build filter label for UI based on active filters
+        """
         filters = []
         for item in self.filters:
             filter_label = item["label"].replace("|", " | ").replace(",", " + ")
