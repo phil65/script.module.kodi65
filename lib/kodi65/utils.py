@@ -39,6 +39,14 @@ def dump_dict(dct):
                       separators=(',', ': '))
 
 
+def format_seconds(seconds):
+    if not seconds:
+        return None
+    hours, remainder = divmod(seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    return '%02d:%02d:%02d' % (hours, minutes, seconds)
+
+
 def pp(string):
     """
     prettyprint json

@@ -176,6 +176,9 @@ class DialogBaseList(object):
         self.filter_label = "  -  ".join(filters)
 
     def update_content(self, force_update=False):
+        """
+        fetch listitems and pagination info based on current state
+        """
         self.data = self.fetch_data(force=force_update)
         if not self.data:
             return None
@@ -186,6 +189,9 @@ class DialogBaseList(object):
         self.prev_page_token = self.data.prev_page_token
 
     def update_ui(self):
+        """
+        add listitems to list, set focusposition, set window properties
+        """
         if not self.listitems and self.getFocusId() == self.getCurrentContainerId():
             self.setFocusId(ID_BUTTON_SEARCH)
         self.clearList()
@@ -205,6 +211,9 @@ class DialogBaseList(object):
         self.setProperty("Type", self.TRANSLATIONS[self.type])
 
     def reset(self, mode="filter"):
+        """
+        resets the container to its default mode and updates
+        """
         self.page = 1
         self.mode = mode
         self.verify_sort()
