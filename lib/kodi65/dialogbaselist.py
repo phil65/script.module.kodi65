@@ -209,7 +209,7 @@ class DialogBaseList(object):
         self.data = self.fetch_data(force=force_update)
         if not self.data:
             return None
-        self.listitems = self.data.create_listitems()
+        self.listitems = self.data
         self.total_pages = self.data.total_pages
         self.total_items = self.data.totals
         self.next_page_token = self.data.next_page_token
@@ -224,7 +224,8 @@ class DialogBaseList(object):
         self.clearList()
         if self.listitems:
             for item in self.listitems:
-                self.addItem(item)
+                item.set_label2(self.LABEL2[self.sort](item))
+                self.addItem(item.get_listitem())
             if self.column is not None:
                 self.setCurrentListPosition(self.column)
         self.setProperty("TotalPages", str(self.total_pages))
