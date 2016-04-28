@@ -21,6 +21,9 @@ ID_BUTTON_TOGGLETYPE = 5007
 
 
 class DialogBaseList(object):
+    """
+    BaseList for MediaBrowsers (handles filtering, sorting)
+    """
 
     def __init__(self, *args, **kwargs):
         super(DialogBaseList, self).__init__(*args, **kwargs)
@@ -28,7 +31,7 @@ class DialogBaseList(object):
         self.filter_label = kwargs.get("filter_label", "")
         self.mode = kwargs.get("mode", "filter")
         self.order = kwargs.get('order', "desc")
-        self.sort = kwargs.get('sort', self.get_default_sort())
+        self.sort = kwargs.get('sort', self.default_sort)
         self.filters = []
         for item in kwargs.get('filters', []):
             self.add_filter(key=item["type"],
@@ -76,6 +79,13 @@ class DialogBaseList(object):
         elif control_id == ID_BUTTON_PREV_PAGE:
             self.go_to_prev_page()
 
+    @property
+    def sort_key(self):
+        """
+        get key used for sorting
+        """
+        return self.type
+
     def close(self):
         """
         save viewtype and last focusposition
@@ -90,20 +100,14 @@ class DialogBaseList(object):
         """
         self.sort = sort
         self.verify_sort()
-        self.sort_label = self.SORTS[self.get_sort_key()][self.sort]
+        self.sort_label = self.SORTS[self.sort_key][self.sort]
 
     def verify_sort(self):
         """
         check if sort is valid. If not, change to default.
         """
-        if self.sort not in [i for i in self.SORTS[self.get_sort_key()].keys()]:
-            self.set_sort(self.get_default_sort())
-
-    def get_sort_key(self):
-        """
-        get key used for sorting
-        """
-        return self.type
+        if self.sort not in [i for i in self.SORTS[self.sort_key].keys()]:
+            self.set_sort(self.default_sort)
 
     @ch.click(ID_BUTTON_TOGGLETYPE)
     def toggle_type(self, control_id):
@@ -228,6 +232,7 @@ class DialogBaseList(object):
                 self.addItem(item.get_listitem())
             if self.column is not None:
                 self.setCurrentListPosition(self.column)
+        self.setContent(self.listitems.content_type)
         self.setProperty("TotalPages", str(self.total_pages))
         self.setProperty("TotalItems", str(self.total_items))
         self.setProperty("CurrentPage", str(self.page))
