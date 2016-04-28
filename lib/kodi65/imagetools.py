@@ -113,9 +113,9 @@ def get_colors(img):
     min_brightness = 170
     if avg < min_brightness:
         diff = min_brightness - avg
-        r_avg = r_avg + diff if r_avg <= (255 - diff) else 255
-        g_avg = g_avg + diff if g_avg <= (255 - diff) else 255
-        b_avg = b_avg + diff if b_avg <= (255 - diff) else 255
+        r_avg = min(r_avg + diff, 255)
+        g_avg = min(g_avg + diff, 255)
+        b_avg = min(b_avg + diff, 255)
     imagecolor = "FF%s%s%s" % (format(r_avg, '02x'), format(g_avg, '02x'), format(b_avg, '02x'))
     # utils.log("Average Color: " + imagecolor)
     return imagecolor
