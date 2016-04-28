@@ -177,8 +177,8 @@ class ListItem(object):
         return {k: v for k, v in self._properties.iteritems() if v}
 
     def get_listitem(self):
-        listitem = xbmcgui.ListItem(label=self.label,
-                                    label2=self.label2,
+        listitem = xbmcgui.ListItem(label=unicode(self.label) if self.label else "",
+                                    label2=unicode(self.label2) if self.label2 else "",
                                     path=self.path)
         props = {k: unicode(v) for k, v in self._properties.iteritems() if v}
         infos = {k.lower(): v for k, v in self._infos.iteritems() if v}
