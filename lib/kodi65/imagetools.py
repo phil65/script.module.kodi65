@@ -71,17 +71,13 @@ def blur(input_img, radius=25):
 def get_cached_thumb(filename):
     if filename.startswith("stack://"):
         filename = filename[8:].split(" , ")[0]
-    if filename.endswith("folder.jpg"):
-        cachedthumb = xbmc.getCacheThumbName(filename)
-        thumbpath = os.path.join(THUMBS_CACHE_PATH, cachedthumb[0], cachedthumb).replace("/Video", "")
-    else:
-        cachedthumb = xbmc.getCacheThumbName(filename)
+    cachedthumb = xbmc.getCacheThumbName(filename)
+    if not filename.endswith("folder.jpg"):
         if ".jpg" in filename:
             cachedthumb = cachedthumb.replace("tbn", "jpg")
         elif ".png" in filename:
             cachedthumb = cachedthumb.replace("tbn", "png")
-        thumbpath = os.path.join(THUMBS_CACHE_PATH, cachedthumb[0], cachedthumb).replace("/Video", "")
-    return thumbpath
+    return os.path.join(THUMBS_CACHE_PATH, cachedthumb[0], cachedthumb).replace("/Video", "")
 
 
 def get_colors(img):
@@ -116,9 +112,7 @@ def get_colors(img):
         r_avg = min(r_avg + diff, 255)
         g_avg = min(g_avg + diff, 255)
         b_avg = min(b_avg + diff, 255)
-    imagecolor = "FF%s%s%s" % (format(r_avg, '02x'), format(g_avg, '02x'), format(b_avg, '02x'))
-    # utils.log("Average Color: " + imagecolor)
-    return imagecolor
+    return "FF%s%s%s" % (format(r_avg, '02x'), format(g_avg, '02x'), format(b_avg, '02x'))
 
 
 class FilterImageThread(threading.Thread):
