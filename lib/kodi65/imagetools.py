@@ -77,22 +77,12 @@ def get_colors(img):
     data = []
     for x in xrange(width / 2):
         data += [pixels[x * 2, y * 2] for y in xrange(height / 2)]
-    r = 0
-    g = 0
-    b = 0
-    pixels = 0
-    for x in data:
-        brightness = x[0] + x[1] + x[2]
-        if 150 < brightness < 720:
-            r += x[0]
-            g += x[1]
-            b += x[2]
-            pixels += 1
-    if pixels == 0:
+    pix_values = [(x[0], x[1], x[2]) for x in data if 150 < (x[0] + x[1] + x[2]) < 720]
+    if len(pix_values) == 0:
         return "FFF0F0F0"
-    r_avg = int(r / pixels)
-    g_avg = int(g / pixels)
-    b_avg = int(b / pixels)
+    r_avg = int(sum([i[0] for i in pix_values]) / len(pix_values))
+    g_avg = int(sum([i[1] for i in pix_values]) / len(pix_values))
+    b_avg = int(sum([i[2] for i in pix_values]) / len(pix_values))
     avg = (r_avg + g_avg + b_avg) / 3
     min_brightness = 170
     if avg < min_brightness:
