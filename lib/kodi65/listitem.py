@@ -17,6 +17,9 @@ class ListItem(object):
     ICON_OVERLAY_HD = 6         # Is on hard disk stored
 
     def __init__(self, label="", label2="", path="", infos=None, properties=None, size="", artwork=None):
+        """
+        Kodi listitem, based on built-in datatypes
+        """
         self.label = label
         self.label2 = label2
         self.path = path
@@ -216,6 +219,9 @@ class ListItem(object):
 
 
 class AudioItem(ListItem):
+    """
+    Kodi audio listitem, based on built-in datatypes
+    """
 
     def __init__(self, *args, **kwargs):
         self.type = "music"
@@ -269,6 +275,9 @@ class AudioItem(ListItem):
 
 
 class VideoItem(ListItem):
+    """
+    Kodi video listitem, based on built-in datatypes
+    """
 
     def __init__(self, *args, **kwargs):
         self.type = "video"

@@ -16,6 +16,9 @@ PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 
 
 def handle_videos(results, extended=False):
+    """
+    process vidoe api result to ItemList
+    """
     videos = ItemList(content_type="videos")
     for item in results:
         snippet = item["snippet"]
@@ -69,6 +72,9 @@ def handle_videos(results, extended=False):
 
 
 def get_duration_in_seconds(duration):
+    """
+    convert youtube duration string to seconds int
+    """
     duration = duration[2:-1].replace("H", "M").split("M")
     if len(duration) == 3:
         return int(duration[0]) * 3600 + int(duration[1]) * 60 + int(duration[0])
@@ -79,6 +85,9 @@ def get_duration_in_seconds(duration):
 
 
 def handle_playlists(results):
+    """
+    process playlist api result to ItemList
+    """
     playlists = ItemList(content_type="videos")
     for item in results:
         snippet = item["snippet"]
@@ -109,6 +118,9 @@ def handle_playlists(results):
 
 
 def handle_channels(results):
+    """
+    process channel api result to ItemList
+    """
     channels = ItemList(content_type="videos")
     for item in results:
         snippet = item["snippet"]
@@ -139,6 +151,9 @@ def handle_channels(results):
 
 
 def get_data(method, params=None, cache_days=0.5):
+    """
+    fetch data from youtube API
+    """
     params = params if params else {}
     params["key"] = YT_KEY
     params = {k: unicode(v).encode('utf-8') for k, v in params.iteritems() if v}
@@ -151,6 +166,9 @@ def get_data(method, params=None, cache_days=0.5):
 
 
 def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, page="", filters=None, media_type="video"):
+    """
+    returns ItemList according to search term, filters etc.
+    """
     params = {"part": "id,snippet",
               "maxResults": limit,
               "type": media_type,
@@ -176,6 +194,9 @@ def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, p
 
 
 def get_playlist_videos(playlist_id=""):
+    """
+    returns ItemList from playlist with *playlist_id
+    """
     if not playlist_id:
         return []
     params = {"part": "id,snippet",
@@ -189,6 +210,9 @@ def get_playlist_videos(playlist_id=""):
 
 
 def get_user_playlists(username=""):
+    """
+    returns ItemList with user uploads from *username
+    """
     params = {"part": "contentDetails",
               "forUsername": username}
     results = get_data(method="channels",

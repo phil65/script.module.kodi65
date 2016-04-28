@@ -94,6 +94,9 @@ class ItemList(object):
         return self
 
     def prettify(self):
+        """
+        log a formatted list of all items
+        """
         for item in self._items:
             utils.log(item)
 
@@ -135,9 +138,15 @@ class ItemList(object):
         return value if value else ""
 
     def create_listitems(self):
+        """
+        returns list with xbmcgui listitems
+        """
         return [item.get_listitem() for item in self._items] if self._items else []
 
     def set_plugin_list(self, handle):
+        """
+        populate plugin list with *handle, set sorts and content
+        """
         for item in self.sorts:
             xbmcplugin.addSortMethod(handle, SORTS[item])
 
@@ -165,6 +174,9 @@ class ItemList(object):
         xbmcplugin.endOfDirectory(handle)
 
     def sort(self):
+        """
+        sort based on self.sortkey and self.localfirst
+        """
         self._items = sorted(self._items,
                              key=lambda k: k.get_info(self.sortkey),
                              reverse=True)
@@ -175,7 +187,7 @@ class ItemList(object):
 
     def reduce(self, key="job"):
         """
-        TODO: refactor
+        remove duplicate listitems (based on property "id") and merge their property with key *key
         """
         ids = []
         merged_items = []
