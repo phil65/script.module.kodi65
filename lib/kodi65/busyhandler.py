@@ -10,11 +10,20 @@ class BusyHandler(object):
     """
     def __init__(self, *args, **kwargs):
         self.busy = 0
+        self.enabled = True
+
+    def enable(self):
+        self.enabled = True
+
+    def disable(self):
+        self.enabled = False
 
     def show_busy(self):
         """
         Increase busycounter and open busydialog if needed
         """
+        if not self.enabled:
+            return None
         if self.busy == 0:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.busy += 1
@@ -23,6 +32,8 @@ class BusyHandler(object):
         """
         Decrease busycounter and close busydialog if needed
         """
+        if not self.enabled:
+            return None
         self.busy = max(0, self.busy - 1)
         if self.busy == 0:
             xbmc.executebuiltin("Dialog.Close(busydialog)")

@@ -194,7 +194,9 @@ class DialogBaseList(object):
             return None
         self.search_str = label
         self.filters = []
+        busyhandler.busyhandler.disable()
         self.reset("search")
+        busyhandler.busyhandler.enable()
 
     def set_filter_label(self):
         """
