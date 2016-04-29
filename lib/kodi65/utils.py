@@ -13,7 +13,6 @@ import re
 import hashlib
 import urllib
 import urllib2
-import traceback
 import xbmc
 import xbmcgui
 import xbmcvfs
@@ -88,29 +87,6 @@ def get_skin_string(name):
 
 def set_skin_string(name, value):
     xbmc.executebuiltin("Skin.SetString(%s, %s)" % (name, value))
-
-
-def busy_dialog(func):
-    """
-    Decorator to show busy dialog while function is running
-    Only one of the decorated functions may run simultaniously
-    """
-
-    @wraps(func)
-    def decorator(self, *args, **kwargs):
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
-        result = func(self, *args, **kwargs)
-        try:
-            result = func(self, *args, **kwargs)
-        except Exception:
-            result = None
-            print traceback.format_exc()
-            notify("Error", "please contact add-on author")
-        finally:
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-        return result
-
-    return decorator
 
 
 def run_async(func):

@@ -7,7 +7,7 @@ import xbmc
 import xbmcgui
 
 from kodi65 import addon
-from kodi65 import utils
+from kodi65 import busyhandler
 from kodi65.actionhandler import ActionHandler
 from T9Search import T9Search
 
@@ -281,7 +281,7 @@ class DialogBaseList(object):
         col = xbmc.getInfoLabel("Container(%s).Column" % self.getCurrentContainerId())
         self.column = int(col) if col != "" else None
 
-    @utils.busy_dialog
+    @busyhandler.set_busy
     def update(self, force_update=False):
         """
         complete refresh of both content and ui
