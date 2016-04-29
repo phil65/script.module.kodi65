@@ -54,6 +54,7 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
 def open(listitems, header, detailed=True, extrabutton=False):
     """
     open selectdialog, return index (-1 for closing, -2 for extra button)
+    *listitems needs to be an iterable with ListItems (array, ItemList)
     """
     xbmc.executebuiltin("Dialog.Close(busydialog)")
     w = SelectDialog('DialogSelect.xml', addon.PATH,
