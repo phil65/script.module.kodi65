@@ -1,3 +1,8 @@
+# -*- coding: utf8 -*-
+
+# Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
+# This program is Free Software see LICENSE file for details
+
 import xbmc
 from kodi65 import utils
 import traceback
@@ -42,7 +47,6 @@ class BusyHandler(object):
 def set_busy(func):
     """
     Decorator to show busy dialog while function is running
-    Only one of the decorated functions may run simultaniously
     """
     @wraps(func)
     def decorator(self, *args, **kwargs):
