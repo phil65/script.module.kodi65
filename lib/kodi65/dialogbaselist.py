@@ -234,7 +234,7 @@ class DialogBaseList(object):
                 self.addItem(item.get_listitem())
             if self.column is not None:
                 self.setCurrentListPosition(self.column)
-        self.setContent(self.listitems.content_type)
+        # self.setContent(self.listitems.content_type)
         self.setProperty("TotalPages", str(self.total_pages))
         self.setProperty("TotalItems", str(self.total_items))
         self.setProperty("CurrentPage", str(self.page))
