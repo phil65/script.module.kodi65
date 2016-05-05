@@ -146,11 +146,7 @@ class ItemList(object):
         """
         populate plugin list with *handle, set sorts and content
         """
-        for item in self.sorts:
-            xbmcplugin.addSortMethod(handle, SORTS[item])
-
         # these fixed sortmethods are only temporary
-
         if self.content_type == "tvshows":
             xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
             xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
@@ -163,6 +159,8 @@ class ItemList(object):
             xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_TITLE)
             xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
             xbmcplugin.addSortMethod(handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
+        for item in self.sorts:
+            xbmcplugin.addSortMethod(handle, SORTS[item])
         if self.content_type:
             xbmcplugin.setContent(handle, self.content_type)
         items = [(i.get_path(), i.get_listitem(), bool(i.get_property("directory"))) for i in self._items]
