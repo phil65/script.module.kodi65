@@ -48,8 +48,7 @@ SORTS = {"none": xbmcplugin.SORT_METHOD_NONE,
          "playcount": xbmcplugin.SORT_METHOD_PLAYCOUNT,
          "channel": xbmcplugin.SORT_METHOD_CHANNEL,
          "date_taken": xbmcplugin.SORT_METHOD_DATE_TAKEN,
-         "userrating": xbmcplugin.SORT_METHOD_VIDEO_USER_RATING,
-         "song_user_rating": xbmcplugin.SORT_METHOD_SONG_USER_RATING}
+         "userrating": xbmcplugin.SORT_METHOD_VIDEO_USER_RATING}
 
 
 class ItemList(object):
