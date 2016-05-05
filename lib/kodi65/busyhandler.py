@@ -18,9 +18,15 @@ class BusyHandler(object):
         self.enabled = True
 
     def enable(self):
+        """
+        Enables busydialog handling
+        """
         self.enabled = True
 
     def disable(self):
+        """
+        Disables busydialog handling
+        """
         self.enabled = False
 
     def show_busy(self):
