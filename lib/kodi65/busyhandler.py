@@ -56,8 +56,8 @@ def set_busy(func):
     """
     @wraps(func)
     def decorator(self, *args, **kwargs):
-        busyhandler.show_busy()
         try:
+            busyhandler.show_busy()
             result = func(self, *args, **kwargs)
         except Exception:
             result = None
@@ -65,7 +65,7 @@ def set_busy(func):
             utils.notify("Error", "please contact add-on author")
         finally:
             busyhandler.hide_busy()
-        return result
+            return result
 
     return decorator
 
