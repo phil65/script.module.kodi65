@@ -9,8 +9,8 @@ import itertools
 from kodi65 import kodijson
 from kodi65 import addon
 from kodi65 import utils
-from kodi65.listitem import VideoItem
-from kodi65.itemlist import ItemList
+from kodi65 import VideoItem
+from kodi65 import ItemList
 
 PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 MOVIE_PROPS = ["title", "genre", "year", "rating", "director", "trailer",

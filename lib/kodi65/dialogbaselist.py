@@ -7,8 +7,8 @@ import xbmc
 import xbmcgui
 
 from kodi65 import addon
-from kodi65 import busyhandler
-from kodi65.actionhandler import ActionHandler
+from kodi65 import busyhandler, set_busy
+from kodi65 import ActionHandler
 from T9Search import T9Search
 
 ch = ActionHandler()
@@ -194,9 +194,9 @@ class DialogBaseList(object):
             return None
         self.search_str = label
         self.filters = []
-        busyhandler.busyhandler.disable()
+        busyhandler.disable()
         self.reset("search")
-        busyhandler.busyhandler.enable()
+        busyhandler.enable()
 
     def set_filter_label(self):
         """
@@ -283,7 +283,7 @@ class DialogBaseList(object):
         col = xbmc.getInfoLabel("Container(%s).Column" % self.getCurrentContainerId())
         self.column = int(col) if col != "" else None
 
-    @busyhandler.set_busy
+    @set_busy
     def update(self, force_update=False):
         """
         complete refresh of both content and ui

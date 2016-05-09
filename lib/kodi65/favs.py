@@ -3,7 +3,7 @@
 # Copyright (C) 2016 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from kodi65.listitem import ListItem
+from kodi65 import ListItem
 from kodi65 import utils
 from kodi65 import kodijson
 
