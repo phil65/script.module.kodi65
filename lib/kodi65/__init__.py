@@ -9,5 +9,8 @@ from actionhandler import ActionHandler
 from busyhandler import busyhandler, set_busy
 from kodilogging import KodiLogHandler, config
 from dialogbaselist import DialogBaseList
-from localdb import local_db
-from player import player
+from localdb import LocalDB
+from player import VideoPlayer
+
+local_db = LocalDB()
+player = VideoPlayer()

@@ -483,5 +483,3 @@ def select_aspectratio(aspect):
         return "2.55"
     else:
         return "2.76"
-
-local_db = LocalDB()

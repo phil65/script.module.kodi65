@@ -44,5 +44,3 @@ class VideoPlayer(xbmc.Player):
         while not self.stopped:
             xbmc.sleep(100)
         self.stopped = False
-
-player = VideoPlayer()
