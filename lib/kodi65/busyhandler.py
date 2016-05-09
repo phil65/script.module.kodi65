@@ -57,7 +57,6 @@ def set_busy(func):
     @wraps(func)
     def decorator(self, *args, **kwargs):
         busyhandler.show_busy()
-        result = func(self, *args, **kwargs)
         try:
             result = func(self, *args, **kwargs)
         except Exception:
