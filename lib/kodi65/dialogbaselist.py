@@ -7,7 +7,7 @@ import xbmc
 import xbmcgui
 
 from kodi65 import addon
-from kodi65 import busyhandler, set_busy
+from kodi65 import busy
 from kodi65 import ActionHandler
 from T9Search import T9Search
 
@@ -21,6 +21,7 @@ ID_BUTTON_TOGGLETYPE = 5007
 
 
 class DialogBaseList(object):
+
     """
     BaseList for MediaBrowsers (handles filtering, sorting)
     """
@@ -194,9 +195,9 @@ class DialogBaseList(object):
             return None
         self.search_str = label
         self.filters = []
-        busyhandler.disable()
+        busy.disable()
         self.reset("search")
-        busyhandler.enable()
+        busy.enable()
 
     def set_filter_label(self):
         """
@@ -283,7 +284,7 @@ class DialogBaseList(object):
         col = xbmc.getInfoLabel("Container(%s).Column" % self.getCurrentContainerId())
         self.column = int(col) if col != "" else None
 
-    @set_busy
+    @busy.set_busy
     def update(self, force_update=False):
         """
         complete refresh of both content and ui

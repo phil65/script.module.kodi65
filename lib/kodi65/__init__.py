@@ -6,7 +6,7 @@
 from listitem import ListItem, VideoItem, AudioItem
 from itemlist import ItemList
 from actionhandler import ActionHandler
-from busyhandler import busyhandler, set_busy
+from busyhandler import busyhandler as busy
 from kodilogging import KodiLogHandler, config
 from dialogbaselist import DialogBaseList
 from localdb import LocalDB

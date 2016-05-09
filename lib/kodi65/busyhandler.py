@@ -49,24 +49,23 @@ class BusyHandler(object):
         if self.busy == 0:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
 
+    def set_busy(self, func):
+        """
+        Decorator to show busy dialog while function is running
+        """
+        @wraps(func)
+        def decorator(cls, *args, **kwargs):
+            try:
+                self.show_busy()
+                result = func(cls, *args, **kwargs)
+            except Exception:
+                result = None
+                utils.log(traceback.format_exc())
+                utils.notify("Error", "please contact add-on author")
+            finally:
+                self.hide_busy()
+                return result
 
-def set_busy(func):
-    """
-    Decorator to show busy dialog while function is running
-    """
-    @wraps(func)
-    def decorator(self, *args, **kwargs):
-        try:
-            busyhandler.show_busy()
-            result = func(self, *args, **kwargs)
-        except Exception:
-            result = None
-            utils.log(traceback.format_exc())
-            utils.notify("Error", "please contact add-on author")
-        finally:
-            busyhandler.hide_busy()
-            return result
-
-    return decorator
+        return decorator
 
 busyhandler = BusyHandler()
