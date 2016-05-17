@@ -110,16 +110,6 @@ def contextmenu(options):
         return [i[0] for i in options][index]
 
 
-def convert_youtube_url(raw_string):
-    """
-    get plugin playback URL for URL *raw_string
-    """
-    youtube_id = extract_youtube_id(raw_string)
-    if youtube_id:
-        return 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % youtube_id
-    return ""
-
-
 def extract_youtube_id(raw_string):
     """
     get youtube video id if from youtube URL
