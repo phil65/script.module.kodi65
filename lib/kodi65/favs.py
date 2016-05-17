@@ -12,10 +12,13 @@ def get_favs_by_type(fav_type):
     """
     returns dict list containing favourites with type *fav_type
     """
-    return [fav for fav in get_favs() if fav["Type"] == fav_type]
+    return [fav for fav in get_favs() if fav["type"] == fav_type]
 
 
 def get_fav_path(fav):
+    """
+    get builtin for fav according to type
+    """
     if fav["type"] == "media":
         return "PlayMedia(%s)" % (fav["path"])
     elif fav["type"] == "script":
@@ -56,5 +59,5 @@ def get_icon_panel(number):
                       'path': "plugin://script.extendedinfo/?info=action&&id=" + infopanel_path,
                       'thumb': utils.get_skin_string("IconPanelItem%i.Icon" % (i + offset)),
                       'id': "IconPanelitem%i" % (i + offset),
-                      'Type': utils.get_skin_string("IconPanelItem%i.Type" % (i + offset))})
+                      'type': utils.get_skin_string("IconPanelItem%i.Type" % (i + offset))})
     return items
