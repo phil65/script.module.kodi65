@@ -392,12 +392,12 @@ class LocalDB(object):
             return None
         if media_type == "movie":
             data = kodijson.get_json(method="VideoLibrary.GetMovieDetails",
-                                     params={"properties": ["imdbnumber", "title", "year"], "movieid": dbid})
+                                     params={"properties": ["imdbnumber", "title", "year"], "movieid": int(dbid)})
             if "result" in data and "moviedetails" in data["result"]:
                 return data['result']['moviedetails']['imdbnumber']
         elif media_type == "tvshow":
             data = kodijson.get_json(method="VideoLibrary.GetTVShowDetails",
-                                     params={"properties": ["imdbnumber", "title", "year"], "tvshowid": dbid})
+                                     params={"properties": ["imdbnumber", "title", "year"], "tvshowid": int(dbid)})
             if "result" in data and "tvshowdetails" in data["result"]:
                 return data['result']['tvshowdetails']['imdbnumber']
         return None
