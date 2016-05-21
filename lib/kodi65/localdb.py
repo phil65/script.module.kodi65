@@ -169,10 +169,10 @@ class LocalDB(object):
         resume = movie['resume']
         if (resume['position'] and resume['total']) > 0:
             resumable = "true"
-            played = '%s' % int((float(resume['position']) / float(resume['total'])) * 100)
+            played = int((float(resume['position']) / float(resume['total'])) * 100)
         else:
             resumable = "false"
-            played = '0'
+            played = 0
         db_movie = VideoItem(label=movie.get('label'),
                              path=path)
         db_movie.set_infos({'title': movie.get('label'),
@@ -351,7 +351,8 @@ class LocalDB(object):
             remote_items = sorted(remote_items,
                                   key=lambda k: k.get_info(sortkey),
                                   reverse=True)
-        return ItemList(content_type=media_type + "s", items=local_items + remote_items)
+        return ItemList(content_type=media_type + "s",
+                        items=local_items + remote_items)
 
     def compare_album_with_library(self, online_list):
         """
