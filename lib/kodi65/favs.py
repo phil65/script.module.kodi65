@@ -44,6 +44,7 @@ def get_favs():
         item.set_artwork({'thumb': fav["thumbnail"]})
         item.set_properties({'type': fav["type"],
                              'builtin': path})
+        items.append(item)
     return items
 
 
@@ -55,9 +56,10 @@ def get_icon_panel(number):
     offset = number * 5 - 5
     for i in xrange(1, 6):
         infopanel_path = utils.get_skin_string("IconPanelItem%i.Path" % (i + offset))
-        items.append({'label': utils.get_skin_string("IconPanelItem%i.Label" % (i + offset)),
-                      'path': "plugin://script.extendedinfo/?info=action&&id=" + infopanel_path,
-                      'thumb': utils.get_skin_string("IconPanelItem%i.Icon" % (i + offset)),
-                      'id': "IconPanelitem%i" % (i + offset),
-                      'type': utils.get_skin_string("IconPanelItem%i.Type" % (i + offset))})
+        item = ListItem(label=utils.get_skin_string("IconPanelItem%i.Label" % (i + offset)),
+                        path="plugin://script.extendedinfo/?info=action&&id=" + infopanel_path)
+        item.set_artwork({'thumb': utils.get_skin_string("IconPanelItem%i.Icon" % (i + offset))})
+        item.set_properties({'type': utils.get_skin_string("IconPanelItem%i.Type" % (i + offset)),
+                             'id': "IconPanelitem%i" % (i + offset)})
+        items.append(item)
     return items
