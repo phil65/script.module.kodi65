@@ -4,6 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 from kodi65 import ListItem
+from kodi65 import ItemList
 from kodi65 import utils
 from kodi65 import kodijson
 
@@ -33,7 +34,7 @@ def get_favs():
     """
     returns dict list containing favourites
     """
-    items = []
+    items = ItemList()
     data = kodijson.get_favourites()
     if "result" not in data or data["result"]["limits"]["total"] == 0:
         return []
@@ -52,7 +53,7 @@ def get_icon_panel(number):
     """
     get icon panel with index *number, returns dict list based on skin strings
     """
-    items = []
+    items = ItemList()
     offset = number * 5 - 5
     for i in xrange(1, 6):
         infopanel_path = utils.get_skin_string("IconPanelItem%i.Path" % (i + offset))
