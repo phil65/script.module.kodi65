@@ -37,7 +37,7 @@ def get_artists(properties=None):
 
 def get_addons(properties=None):
     properties = properties if properties else []
-    data = get_json(method="AudioLibrary.GetArtists",
+    data = get_json(method="Addons.GetAddons",
                     params={"properties": properties})
     if "result" in data and "artists" in data["result"]:
         return data["result"]["artists"]
