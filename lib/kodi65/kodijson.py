@@ -9,20 +9,34 @@ import xbmc
 
 def play_media(media_type, dbid, resume=True):
     if media_type in ['movie', 'episode']:
-        get_json(method="Player.Open",
-                 params={"item": {"%sid" % media_type: int(dbid)}, "options": {"resume": resume}})
+        return get_json(method="Player.Open",
+                        params={"item": {"%sid" % media_type: int(dbid)}, "options": {"resume": resume}})
     elif media_type in ['musicvideo', 'album', 'song']:
-        get_json(method="Player.Open",
-                 params={"item": {"%sid" % media_type: int(dbid)}})
+        return get_json(method="Player.Open",
+                        params={"item": {"%sid" % media_type: int(dbid)}})
+
+
+def get_directory(path, media_type="files"):
+    return get_json(method="Files.GetDirectory",
+                    params={"directory": path, "media": media_type})
 
 
 def send_text(text, close_keyboard=True):
-    get_json(method="Input.SendText",
-             params={"text": text, "done": "true" if close_keyboard else "false"})
+    return get_json(method="Input.SendText",
+                    params={"text": text, "done": "true" if close_keyboard else "false"})
 
 
 def get_artists(properties=None):
-    properties = [] if not properties else properties
+    properties = properties if properties else []
+    data = get_json(method="AudioLibrary.GetArtists",
+                    params={"properties": properties})
+    if "result" in data and "artists" in data["result"]:
+        return data["result"]["artists"]
+    return []
+
+
+def get_addons(properties=None):
+    properties = properties if properties else []
     data = get_json(method="AudioLibrary.GetArtists",
                     params={"properties": properties})
     if "result" in data and "artists" in data["result"]:
@@ -31,7 +45,7 @@ def get_artists(properties=None):
 
 
 def get_movies(properties=None):
-    properties = [] if not properties else properties
+    properties = properties if properties else []
     data = get_json(method="VideoLibrary.GetMovies",
                     params={"properties": properties})
     if "result" in data and "movies" in data["result"]:
@@ -40,7 +54,7 @@ def get_movies(properties=None):
 
 
 def get_tvshows(properties=None):
-    properties = [] if not properties else properties
+    properties = properties if properties else []
     data = get_json(method="VideoLibrary.GetTVShows",
                     params={"properties": properties})
     if "result" in data and "tvshows" in data["result"]:
@@ -50,14 +64,14 @@ def get_tvshows(properties=None):
 
 def set_userrating(media_type, dbid, rating):
     if media_type == "movie":
-        get_json(method="VideoLibrary.SetMovieDetails",
-                 params={"movieid": dbid, "userrating": rating})
+        return get_json(method="VideoLibrary.SetMovieDetails",
+                        params={"movieid": dbid, "userrating": rating})
     elif media_type == "tv":
-        get_json(method="VideoLibrary.SetTVShowDetails",
-                 params={"tvshowid": dbid, "userrating": rating})
+        return get_json(method="VideoLibrary.SetTVShowDetails",
+                        params={"tvshowid": dbid, "userrating": rating})
     elif media_type == "episode":
-        get_json(method="VideoLibrary.SetEpisodeDetails",
-                 params={"episodeid": dbid, "userrating": rating})
+        return get_json(method="VideoLibrary.SetEpisodeDetails",
+                        params={"episodeid": dbid, "userrating": rating})
 
 
 def get_favourites():
@@ -66,9 +80,9 @@ def get_favourites():
 
 
 def set_art(media_type, art, dbid):
-    get_json(method="VideoLibrary.Set%sDetails" % media_type,
-             params={"art": art,
-                     "%sid" % media_type.lower(): int(dbid)})
+    return get_json(method="VideoLibrary.Set%sDetails" % media_type,
+                    params={"art": art,
+                            "%sid" % media_type.lower(): int(dbid)})
 
 
 def get_json(method, params):
