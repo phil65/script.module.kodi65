@@ -8,6 +8,12 @@ import xbmc
 
 
 def play_media(media_type, dbid, resume=True):
+    '''
+    Start playback of media item
+    *media_type: movie, episode, musicvideo, album, song
+    *dbid: DBID of media to play
+    *resume: Resume from last position (only movie/episode)
+    '''
     if media_type in ['movie', 'episode']:
         return get_json(method="Player.Open",
                         params={"item": {"%sid" % media_type: int(dbid)}, "options": {"resume": resume}})
@@ -35,16 +41,28 @@ def get_artists(properties=None):
     return []
 
 
-def get_addons(properties=None):
-    properties = properties if properties else []
+def get_addons(properties=None, installed=True, enabled="all"):
+    '''
+    Get a list of addons
+    *properties: list of properties
+    *installed: True, False or "all"
+    *enabled: True, False or "all"
+    '''
+    params = {"properties": properties if properties else [],
+              "installed": installed,
+              "enabled": enabled}
     data = get_json(method="Addons.GetAddons",
-                    params={"properties": properties})
-    if "result" in data and "artists" in data["result"]:
-        return data["result"]["artists"]
+                    params=params)
+    if "result" in data and "addons" in data["result"]:
+        return data["result"]["addons"]
     return []
 
 
 def get_movies(properties=None):
+    '''
+    Get a list of movies
+    *properties: list of properties
+    '''
     properties = properties if properties else []
     data = get_json(method="VideoLibrary.GetMovies",
                     params={"properties": properties})
@@ -54,6 +72,10 @@ def get_movies(properties=None):
 
 
 def get_tvshows(properties=None):
+    '''
+    Get a list of TvShows
+    *properties: list of properties
+    '''
     properties = properties if properties else []
     data = get_json(method="VideoLibrary.GetTVShows",
                     params={"properties": properties})
@@ -63,6 +85,12 @@ def get_tvshows(properties=None):
 
 
 def set_userrating(media_type, dbid, rating):
+    '''
+    Set the userrating for media items
+    *media_type: movie, tv or episode
+    *dbid: DBID of media to get rated
+    *rating: Actual rating value: 1-10
+    '''
     if media_type == "movie":
         return get_json(method="VideoLibrary.SetMovieDetails",
                         params={"movieid": dbid, "userrating": rating})
