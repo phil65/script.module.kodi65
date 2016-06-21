@@ -64,3 +64,13 @@ def get_icon_panel(number):
                              'id': "IconPanelitem%i" % (i + offset)})
         items.append(item)
     return items
+
+
+def get_addons_by_author(author_name, installed="all"):
+    """
+    get a list of addons from *author_name
+    *installed: "all", True, False
+    """
+    repo_addons = kodijson.get_addons(installed=installed,
+                                      properties=["installed", "author", "name"])
+    return [item for item in repo_addons if item["author"] == author_name]
