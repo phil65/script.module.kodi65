@@ -18,13 +18,13 @@ MOVIE_PROPS = ["title", "genre", "year", "rating", "director", "trailer",
                "playcount", "writer", "studio", "mpaa", "cast", "country",
                "imdbnumber", "runtime", "set", "showlink", "streamdetails",
                "top250", "votes", "file", "sorttitle",
-               "resume", "setid", "dateadded", "tag", "art", "userrating", "ratings"]
+               "resume", "setid", "dateadded", "tag", "art", "userrating", "ratings", "uniqueid"]
 TV_PROPS = ["title", "genre", "year", "rating", "plot",
             "studio", "mpaa", "cast", "playcount", "episode",
             "imdbnumber", "premiered", "votes", "lastplayed",
             "file", "originaltitle",
             "sorttitle", "episodeguide", "season", "watchedepisodes",
-            "dateadded", "tag", "art", "userrating", "ratings", "runtime"]
+            "dateadded", "tag", "art", "userrating", "ratings", "uniqueid", "runtime"]
 
 
 class LocalDB(object):
