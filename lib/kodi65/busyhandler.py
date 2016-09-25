@@ -55,11 +55,11 @@ class BusyHandler(object):
         """
         @wraps(func)
         def decorator(cls, *args, **kwargs):
+            self.show_busy()
+            result = None
             try:
-                self.show_busy()
                 result = func(cls, *args, **kwargs)
             except Exception:
-                result = None
                 utils.log(traceback.format_exc())
                 utils.notify("Error", "please contact add-on author")
             finally:
@@ -67,5 +67,6 @@ class BusyHandler(object):
                 return result
 
         return decorator
+
 
 busyhandler = BusyHandler()
