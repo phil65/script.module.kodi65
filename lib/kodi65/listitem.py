@@ -16,7 +16,7 @@ class ListItem(object):
     ICON_OVERLAY_WATCHED = 5    # For seen files
     ICON_OVERLAY_HD = 6         # Is on hard disk stored
 
-    def __init__(self, label="", label2="", path="", infos=None, properties=None, size="", artwork=None):
+    def __init__(self, label="", label2="", path="", infos=None, properties=None, size="", artwork=None, ratings=None, ids=None):
         """
         Kodi listitem, based on built-in datatypes
         """
@@ -30,6 +30,8 @@ class ListItem(object):
         self.cast = []
         self._properties = properties if properties else {}
         self._artwork = artwork if artwork else {}
+        self._ratings = ratings if ratings else []
+        self._ids = ids if ids else {}
         self._infos = infos if infos else {}
         self.specials = {}
 
@@ -207,6 +209,9 @@ class ListItem(object):
             listitem.addStreamInfo("audio", item)
         for item in self.subinfo:
             listitem.addStreamInfo("subtitle", item)
+        for item in self._ratings:
+            listitem.setRating(item["type"], item["rating"], item["votes"], item["def"])
+        listitem.setUniqueIDs(self._ids)
         listitem.setInfo("video", {"castandrole": [(i["name"], i["role"]) for i in self.cast]})
         return listitem
 
@@ -293,6 +298,8 @@ class VideoItem(ListItem):
                           "Cast:", utils.dump_dict(self.cast),
                           "VideoStreams:", utils.dump_dict(self.videoinfo),
                           "AudioStreams:", utils.dump_dict(self.audioinfo),
+                          "Ratings:", utils.dump_dict(self._ratings),
+                          "Ids:", utils.dump_dict(self._ids),
                           "Subs:", utils.dump_dict(self.subinfo),
                           "", ""])
 
@@ -358,6 +365,24 @@ class VideoItem(ListItem):
 
     def set_subinfos(self, infos):
         self.subinfo = infos
+
+    def get_rating(self, provider):
+        for item in self._ratings:
+            if item["provider"] == provider.lower():
+                return item
+        return None
+
+    def add_rating(self, provider, rating, votes=None, default=None):
+        self._ratings.append({"provider": provider.lower(),
+                              "rating": rating,
+                              "votes": int(votes),
+                              "default": bool(default)})
+
+    def set_id(self, provider, uid):
+        self._ids[provider] = uid
+
+    def get_id(self):
+        return self._ids
 
     def movie_from_dbid(self, dbid):
         from LocalDB import local_db
