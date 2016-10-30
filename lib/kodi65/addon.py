@@ -48,7 +48,9 @@ def set_password(setting_name, string):
 
 
 def get_password(setting_name):
-    ADDON.getSetting(decode_string(setting_name))
+    setting = ADDON.getSetting(setting_name)
+    if setting:
+        return decode_string(setting)
 
 
 def bool_setting(setting_name):
@@ -82,7 +84,7 @@ def clear_globals():
 
 def encode_string(clear):
     enc = []
-    key = uuid.uuid4()
+    key = str(uuid.getnode())
     for i in range(len(clear)):
         key_c = key[i % len(key)]
         enc_c = chr((ord(clear[i]) + ord(key_c)) % 256)
@@ -92,7 +94,7 @@ def encode_string(clear):
 
 def decode_string(enc):
     dec = []
-    key = uuid.uuid4()
+    key = str(uuid.getnode())
     enc = base64.urlsafe_b64decode(enc)
     for i in range(len(enc)):
         key_c = key[i % len(key)]
