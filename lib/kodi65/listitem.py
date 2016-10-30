@@ -20,8 +20,8 @@ class ListItem(object):
         """
         Kodi listitem, based on built-in datatypes
         """
-        self.label = label
-        self.label2 = label2
+        self.set_label(label)
+        self.set_label2(label2)
         self.path = path
         self.size = ""
         self.videoinfo = []
