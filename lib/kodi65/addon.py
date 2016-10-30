@@ -7,6 +7,8 @@ import xbmcaddon
 import xbmc
 import os
 import xbmcgui
+import base64
+import uuid
 
 ADDON = xbmcaddon.Addon()
 ID = ADDON.getAddonInfo('id').decode("utf-8")
@@ -33,6 +35,20 @@ def setting(setting_name):
 
 def set_setting(setting_name, string):
     ADDON.setSetting(str(setting_name), str(string))
+
+
+def set_password_prompt(setting_name):
+    password = xbmcgui.Dialog().input(LANG(12326), option=xbmcgui.ALPHANUM_HIDE_INPUT)
+    if password:
+        ADDON.setSetting(setting_name, encode_string(password))
+
+
+def set_password(setting_name, string):
+    ADDON.setSetting(setting_name, encode_string(string))
+
+
+def get_password(setting_name):
+    ADDON.getSetting(decode_string(setting_name))
 
 
 def bool_setting(setting_name):
@@ -62,3 +78,24 @@ def clear_global(setting_name):
 
 def clear_globals():
     HOME.clearProperties()
+
+
+def encode_string(clear):
+    enc = []
+    key = uuid.uuid4()
+    for i in range(len(clear)):
+        key_c = key[i % len(key)]
+        enc_c = chr((ord(clear[i]) + ord(key_c)) % 256)
+        enc.append(enc_c)
+    return base64.urlsafe_b64encode("".join(enc))
+
+
+def decode_string(enc):
+    dec = []
+    key = uuid.uuid4()
+    enc = base64.urlsafe_b64decode(enc)
+    for i in range(len(enc)):
+        key_c = key[i % len(key)]
+        dec_c = chr((256 + ord(enc[i]) - ord(key_c)) % 256)
+        dec.append(dec_c)
+    return "".join(dec)
