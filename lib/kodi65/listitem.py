@@ -307,6 +307,8 @@ class VideoItem(ListItem):
         info = listitem.getVideoInfoTag()
         self.label = listitem.getLabel().decode("utf-8")
         self.path = info.getPath().decode("utf-8")
+        for provider in {"tmdb", "imdb", "trakt"}:
+            self._ratings[provider] = listitem.getRating(provider)
         self._infos = {"dbid": info.getDbId(),
                        "mediatype": info.getMediaType(),
                        "plot": info.getPlot().decode("utf-8"),
