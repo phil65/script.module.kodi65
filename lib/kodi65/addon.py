@@ -9,6 +9,7 @@ import os
 import xbmcgui
 import base64
 import uuid
+import hashlib
 
 ADDON = xbmcaddon.Addon()
 ID = ADDON.getAddonInfo('id').decode("utf-8")
@@ -48,6 +49,13 @@ def set_password(setting_name, string):
 
 
 def get_password(setting_name):
+    mac = str(uuid.getnode())
+    mac_hash = hashlib.md5(mac).hexdigest()
+    if not ADDON.getSetting("mac_hash"):
+        ADDON.setSetting("mac_hash", mac_hash)
+    elif ADDON.getSetting("mac_hash") != mac_hash:
+        xbmcgui.Dialog().notification("Error", "MAC id changed. Please enter password again in settings.")
+        return None
     setting = ADDON.getSetting(setting_name)
     if setting:
         return decode_string(setting)
