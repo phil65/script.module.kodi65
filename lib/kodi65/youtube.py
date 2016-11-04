@@ -77,7 +77,7 @@ def get_duration_in_seconds(duration):
     """
     duration = duration[2:-1].replace("H", "M").split("M")
     if len(duration) == 3:
-        return int(duration[0]) * 3600 + int(duration[1]) * 60 + int(duration[0])
+        return int(duration[0]) * 3600 + int(duration[1]) * 60 + int(duration[2])
     elif len(duration) == 2:
         return int(duration[0]) * 60 + int(duration[1])
     else:
