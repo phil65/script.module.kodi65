@@ -388,6 +388,15 @@ class LocalDB(object):
                                      params={"setid": set_dbid})
             return data['result']['setdetails'].get('label')
 
+    def get_artist_mbid(self, dbid):
+        """
+        get mbid of artist with *dbid
+        """
+        data = kodijson.get_json(method="MusicLibrary.GetArtistDetails",
+                                 params={"properties": ["musicbrainzartistid"], "artistid": dbid})
+        mbid = data['result']['artistdetails'].get('musicbrainzartistid')
+        return mbid if mbid else None
+
     def get_imdb_id(self, media_type, dbid):
         if not dbid:
             return None
