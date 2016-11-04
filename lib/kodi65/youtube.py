@@ -93,9 +93,9 @@ def get_formatted_duration(duration):
     if len(duration) == 3:
         return "{}:{}:{}".format(duration[0].zfill(2), duration[1].zfill(2), duration[2].zfill(2))
     elif len(duration) == 2:
-        return "00:{}:{}".format(duration[0].zfill(2), duration[1].zfill(2))
+        return "{}:{}".format(duration[0].zfill(2), duration[1].zfill(2))
     else:
-        return "00:00:{}".format(duration[0].zfill(2))
+        return "00:{}".format(duration[0].zfill(2))
 
 
 def handle_playlists(results):
