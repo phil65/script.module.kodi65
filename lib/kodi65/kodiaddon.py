@@ -16,7 +16,7 @@ HOME = xbmcgui.Window(10000)
 class Addon(object):
 
     def __init__(self, *args, **kwargs):
-        self.addon = xbmcaddon.Addon()
+        self.addon = xbmcaddon.Addon(*args)
         self.ID = self.addon.getAddonInfo('id').decode("utf-8")
         self.ICON = self.addon.getAddonInfo('icon').decode("utf-8")
         self.NAME = self.addon.getAddonInfo('name').decode("utf-8")
@@ -63,7 +63,7 @@ class Addon(object):
         return self.addon.getSetting(setting_name) == "true"
 
     def reload_addon(self):
-        self.addon = xbmcaddon.Addon()
+        self.addon = xbmcaddon.Addon(self.ID)
 
     def LANG(self, id_):
         return self.addon.getLocalizedString(id_) if 31000 <= id_ <= 33000 else xbmc.getLocalizedString(id_)
