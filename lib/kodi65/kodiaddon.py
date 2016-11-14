@@ -42,7 +42,7 @@ class Addon(object):
     def set_password_prompt(self, setting_name):
         password = xbmcgui.Dialog().input(self.LANG(12326), option=xbmcgui.ALPHANUM_HIDE_INPUT)
         if password:
-            self.addon.setSetting(setting_name, encode_string(password))
+            self.set_password(setting_name, password)
 
     def set_password(self, setting_name, string):
         self.addon.setSetting(setting_name, encode_string(string))
