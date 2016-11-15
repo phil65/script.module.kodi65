@@ -4,6 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 import xbmcgui
+import xbmc
 from kodi65 import utils
 
 
@@ -231,6 +232,32 @@ class AudioItem(ListItem):
     """
     Kodi audio listitem, based on built-in datatypes
     """
+    props = ["id",
+             "artist_instrument",
+             "artist_style",
+             "artist_mood",
+             "artist_born",
+             "artist_formed",
+             "artist_description",
+             "artist_genre",
+             "artist_died",
+             "artist_disbanded",
+             "artist_yearsactive",
+             "artist_born",
+             "artist_died",
+             "album_description",
+             "album_theme",
+             "album_mood",
+             "album_style",
+             "album_type",
+             "album_label",
+             "album_artist",
+             "album_genre",
+             "album_title",
+             "album_rating",
+             "album_userrating",
+             "album_votes",
+             "album_releasetype"]
 
     def __init__(self, *args, **kwargs):
         self.type = "music"
@@ -254,33 +281,26 @@ class AudioItem(ListItem):
                        "listeners": info.getListeners(),
                        "playcount": info.getPlayCount(),
                        "year": info.getReleaseDate()}
-        props = ["id",
-                 "artist_instrument",
-                 "artist_style",
-                 "artist_mood",
-                 "artist_born",
-                 "artist_formed",
-                 "artist_description",
-                 "artist_genre",
-                 "artist_died",
-                 "artist_disbanded",
-                 "artist_yearsactive",
-                 "artist_born",
-                 "artist_died",
-                 "album_description",
-                 "album_theme",
-                 "album_mood",
-                 "album_style",
-                 "album_type",
-                 "album_label",
-                 "album_artist",
-                 "album_genre",
-                 "album_title",
-                 "album_rating",
-                 "album_userrating",
-                 "album_votes",
-                 "album_releasetype"]
-        self._properties = {key: listitem.getProperty(key) for key in props}
+        self._properties = {key: listitem.getProperty(key) for key in self.props}
+
+    def from_infolabels(self):
+        self.label = xbmc.getInfoLabel("ListItem.Label")
+        self.path = xbmc.getInfoLabel("ListItem.Path")
+        self._infos = {"dbid": xbmc.getInfoLabel("ListItem.Label"),
+                       "mediatype": xbmc.getInfoLabel("ListItem.DBType"),
+                       "title": xbmc.getInfoLabel("ListItem.Title"),
+                       "votes": xbmc.getInfoLabel("ListItem.Votes"),
+                       "rating": xbmc.getInfoLabel("ListItem.Rating"),
+                       "userrating": xbmc.getInfoLabel("ListItem.UserRating"),
+                       "file": xbmc.getInfoLabel("ListItem.FileNameAndPath"),
+                       "comment": xbmc.getInfoLabel("ListItem.Comment"),
+                       "lyrics": xbmc.getInfoLabel("ListItem.Lyrics"),
+                       "genre": xbmc.getInfoLabel("ListItem.Genre"),
+                       "lastplayed": xbmc.getInfoLabel("ListItem.Label"),
+                       "listeners": xbmc.getInfoLabel("ListItem.Listeners"),
+                       "playcount": xbmc.getInfoLabel("ListItem.Playcount"),
+                       "year": xbmc.getInfoLabel("ListItem.Year")}
+        self._properties = {key: xbmc.getInfoLabel("ListItem.Property({}".format(key)) for key in self.props}
 
 
 class VideoItem(ListItem):
