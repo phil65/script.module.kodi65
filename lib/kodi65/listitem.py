@@ -204,16 +204,6 @@ class ListItem(object):
             listitem.setArt(artwork)
         if infos:
             listitem.setInfo(self.type, infos)
-        for item in self.videoinfo:
-            listitem.addStreamInfo("video", item)
-        for item in self.audioinfo:
-            listitem.addStreamInfo("audio", item)
-        for item in self.subinfo:
-            listitem.addStreamInfo("subtitle", item)
-        for item in self._ratings:
-            listitem.setRating(item["type"], item["rating"], item["votes"], item["def"])
-        listitem.setUniqueIDs(self._ids)
-        listitem.setInfo("video", {"castandrole": [(i["name"], i["role"]) for i in self.cast]})
         return listitem
 
     def to_windowprops(self, prefix="", window_id=10000):
@@ -343,6 +333,7 @@ class VideoItem(ListItem):
                        "pictureurl": info.getPictureURL(),
                        "cast": info.getCast(),
                        "file": info.getFile().decode("utf-8"),
+                       "trailer": info.getTrailer().decode("utf-8"),
                        "originaltitle": info.getOriginalTitle().decode("utf-8"),
                        "tagline": info.getTagLine().decode("utf-8"),
                        "genre": info.getGenre().decode("utf-8"),
@@ -363,6 +354,19 @@ class VideoItem(ListItem):
         self.set_audioinfos(listitem.audioinfo)
         self.set_subinfos(listitem.subinfo)
         self.set_cast(listitem.cast)
+
+    def get_listitem(self):
+        listitem = super(VideoItem, self).get_listitem()
+        for item in self.videoinfo:
+            listitem.addStreamInfo("video", item)
+        for item in self.audioinfo:
+            listitem.addStreamInfo("audio", item)
+        for item in self.subinfo:
+            listitem.addStreamInfo("subtitle", item)
+        for item in self._ratings:
+            listitem.setRating(item["type"], item["rating"], item["votes"], item["def"])
+        listitem.setUniqueIDs(self._ids)
+        listitem.setInfo("video", {"castandrole": [(i["name"], i["role"]) for i in self.cast]})
 
     def add_videoinfo(self, info):
         self.videoinfo.append(info)
