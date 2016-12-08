@@ -22,6 +22,12 @@ import YDStreamExtractor
 from kodi65 import addon
 
 
+def get_youtube_info(youtube_id):
+    YDStreamExtractor.disableDASHVideo(True)
+    return YDStreamExtractor.getVideoInfo(youtube_id,
+                                          quality=1)
+
+
 def log(*args):
     for arg in args:
         if isinstance(arg, str):

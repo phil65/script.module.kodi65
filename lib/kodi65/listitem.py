@@ -192,6 +192,7 @@ class ListItem(object):
                                     path=self.path)
         props = {k: unicode(v) for k, v in self._properties.iteritems() if v}
         infos = {k.lower(): v for k, v in self._infos.iteritems() if v}
+        infos["path"] = self.path
         if "duration" in infos:
             props['duration(h)'] = utils.format_time(infos["duration"], "h")
             props['duration(m)'] = utils.format_time(infos["duration"], "m")
