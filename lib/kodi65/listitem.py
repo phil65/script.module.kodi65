@@ -367,6 +367,7 @@ class VideoItem(ListItem):
             listitem.setRating(item["type"], item["rating"], item["votes"], item["def"])
         listitem.setUniqueIDs(self._ids)
         listitem.setInfo("video", {"castandrole": [(i["name"], i["role"]) for i in self.cast]})
+        return listitem
 
     def add_videoinfo(self, info):
         self.videoinfo.append(info)
