@@ -35,7 +35,7 @@ class ListItem(object):
         self._ids = ids if ids else {}
         self._infos = infos if infos else {}
         self.specials = {}
-        self.is_folder = False
+        self._is_folder = False
 
     def __setitem__(self, key, value):
         self._properties[key] = value
@@ -132,10 +132,10 @@ class ListItem(object):
         return bool(self.specials.get("isPlayable"))
 
     def set_folder(self, value):
-        self.is_folder = value
+        self._is_folder = value
 
     def is_folder(self):
-        return bool(self.is_folder)
+        return bool(self._is_folder)
 
 # playlist_starting_track isspecial item_start isplayable
 
