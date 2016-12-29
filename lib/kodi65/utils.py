@@ -22,6 +22,22 @@ import YDStreamExtractor
 from kodi65 import addon
 
 
+def youtube_info_by_id(youtube_id):
+    vid = get_youtube_info(youtube_id)
+    if not vid:
+        return None, None
+    url = vid.streamURL()
+    listitem = xbmcgui.ListItem(label=vid.title,
+                                thumbnailImage=vid.thumbnail,
+                                path=url)
+    listitem.setInfo(type='video',
+                     infoLabels={"genre": vid.sourceName,
+                                 "path": url,
+                                 "plot": vid.description})
+    listitem.setProperty("isPlayable", "true")
+    return url, listitem
+
+
 def get_youtube_info(youtube_id):
     return YDStreamExtractor.getVideoInfo(youtube_id,
                                           quality=1)
