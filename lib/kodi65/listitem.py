@@ -35,6 +35,7 @@ class ListItem(object):
         self._ids = ids if ids else {}
         self._infos = infos if infos else {}
         self.specials = {}
+        self.is_folder = False
 
     def __setitem__(self, key, value):
         self._properties[key] = value
@@ -59,7 +60,7 @@ class ListItem(object):
         elif key == "path":
             return self.path
         else:
-            raise KeyError
+            raise KeyError(str(key))
 
     def __repr__(self):
         return "\n".join(["Label:", self.label,
@@ -123,6 +124,18 @@ class ListItem(object):
 
     def set_resumetime(self, value):
         self.specials["resumetime"] = value
+
+    def set_playable(self, value):
+        self.specials["isPlayable"] = value
+
+    def is_playable(self):
+        return bool(self.specials.get("isPlayable"))
+
+    def set_folder(self, value):
+        self.is_folder = value
+
+    def is_folder(self):
+        return bool(self.is_folder)
 
 # playlist_starting_track isspecial item_start isplayable
 
