@@ -430,3 +430,14 @@ class VideoItem(ListItem):
         if not dbid:
             return None
         self.update_from_listitem(local_db.get_movie(dbid))
+
+
+class GameItem(ListItem):
+    """
+    Kodi game listitem, based on built-in datatypes
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.type = "game"
+        super(GameItem, self).__init__(*args, **kwargs)
+
