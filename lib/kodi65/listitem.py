@@ -378,7 +378,7 @@ class VideoItem(ListItem):
         for item in self.subinfo:
             listitem.addStreamInfo("subtitle", item)
         for item in self._ratings:
-            listitem.setRating(item["type"], item["rating"], item["votes"], item["def"])
+            listitem.setRating(item["type"], item["rating"], item["votes"], item["default"])
         listitem.setUniqueIDs(self._ids)
         listitem.setCast(self.cast)
         return listitem
@@ -412,6 +412,9 @@ class VideoItem(ListItem):
             if item["provider"] == provider.lower():
                 return item
         return None
+
+    def get_ratings(self):
+        return self._ratings
 
     def add_rating(self, provider, rating, votes=None, default=None):
         self._ratings.append({"provider": provider.lower(),
