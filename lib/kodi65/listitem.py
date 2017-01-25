@@ -9,6 +9,7 @@ from kodi65 import utils
 
 
 class ListItem(object):
+    props = []
     ICON_OVERLAY_NONE = 0       # No overlay icon
     ICON_OVERLAY_RAR = 1        # Compressed *.rar files
     ICON_OVERLAY_ZIP = 2        # Compressed *.zip files
@@ -90,6 +91,9 @@ class ListItem(object):
             return self.__getitem__(key)
         except KeyError:
             return fallback
+
+    def iteritems(self):
+        return self._infos.iteritems()
 
     def update_from_listitem(self, listitem):
         if not listitem:
@@ -328,6 +332,9 @@ class VideoItem(ListItem):
                           "", ""])
 
     def from_listitem(self, listitem):
+        """
+        xbmcgui listitem -> kodi65 listitem
+        """
         info = listitem.getVideoInfoTag()
         self.label = listitem.getLabel().decode("utf-8")
         self.path = info.getPath().decode("utf-8")
@@ -444,3 +451,16 @@ class GameItem(ListItem):
         self.type = "game"
         super(GameItem, self).__init__(*args, **kwargs)
 
+    def from_listitem(self, listitem):
+        info = listitem.getGameInfoTag()
+        self.label = listitem.getLabel().decode("utf-8")
+        self.path = info.getPath().decode("utf-8")
+        self._infos = {"title": info.GetDatabaseId(),
+                       "platform": info.GetMediaType(),
+                       "genres": info.GetTitle().decode("utf-8"),
+                       "publisher": info.GetVotes(),
+                       "developer": info.GetRating(),
+                       "overview": info.GetUserRating(),
+                       "year": info.GetFile().decode("utf-8"),
+                       "gameclient": info.getComment().decode("utf-8")}
+        self._properties = {key: listitem.getProperty(key) for key in self.props}
