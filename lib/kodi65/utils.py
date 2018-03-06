@@ -232,7 +232,7 @@ def input_userrating(preselect=-1):
     opens selectdialog and returns chosen userrating.
     """
     index = xbmcgui.Dialog().select(heading=addon.LANG(38023),
-                                    list=[addon.LANG(10035)] + [str(i) for i in xrange(1, 11)],
+                                    list=[addon.LANG(10035)] + [str(i) for i in range(1, 11)],
                                     preselect=preselect)
     if index == preselect:
         return -1
