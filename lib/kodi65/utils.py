@@ -12,7 +12,6 @@ import time
 import re
 import hashlib
 import urllib
-import urllib2
 import xbmc
 import xbmcgui
 import xbmcvfs
@@ -419,11 +418,11 @@ def get_file(url):
         log("vid_cache_file Image: " + url + "-->" + vid_cache_file)
         return vid_cache_file
     try:
-        request = urllib2.Request(clean_url)
-        request.add_header('Accept-encoding', 'gzip')
-        response = urllib2.urlopen(request, timeout=3)
-        data = response.read()
-        response.close()
+        r = requests.get(clean_url, stream=True)
+        # request.add_header('Accept-encoding', 'gzip')
+        if r.status_code != 200:
+            return ""
+        data = r.content
         log('image downloaded: ' + clean_url)
     except Exception:
         log('image download failed: ' + clean_url)
