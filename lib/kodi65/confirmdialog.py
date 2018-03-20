@@ -3,6 +3,9 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+from __future__ import unicode_literals
+from __future__ import absolute_import
+
 import xbmcgui
 import xbmc
 
@@ -20,6 +23,7 @@ class ConfirmDialog(xbmcgui.WindowXMLDialog):
     """
     open yesnodialog, return -1 for cancelled, otherwise index (0-2)
     """
+
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.yeslabel = kwargs.get('yeslabel')

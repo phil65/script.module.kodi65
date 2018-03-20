@@ -3,7 +3,11 @@
 # Copyright (C) 2016 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+from __future__ import unicode_literals
+from __future__ import absolute_import
+
 import xbmcplugin
+
 from kodi65 import utils
 from kodi65 import addon
 

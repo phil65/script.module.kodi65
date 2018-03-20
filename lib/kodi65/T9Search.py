@@ -3,12 +3,17 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import time
-from threading import Timer
-import xbmcgui
-import os
-from collections import deque
+from __future__ import unicode_literals
+from __future__ import absolute_import
+
 import ast
+import os
+import time
+import threading
+import collections
+
+import xbmcgui
+
 from kodi65 import utils
 from kodi65 import addon
 from kodi65 import ActionHandler
@@ -48,6 +53,7 @@ class T9SearchDialog(xbmcgui.WindowXMLDialog):
     T9 Search dialog class.dialog
     params for constructor: "call", "start_value", "history"
     """
+
     def __init__(self, *args, **kwargs):
         self.callback = kwargs.get("call")
         self.search_str = kwargs.get("start_value", "")
@@ -58,9 +64,10 @@ class T9SearchDialog(xbmcgui.WindowXMLDialog):
         self.setting_name = kwargs.get("history")
         setting_string = addon.setting(self.setting_name)
         if self.setting_name and setting_string:
-            self.last_searches = deque(ast.literal_eval(setting_string), maxlen=10)
+            self.last_searches = collections.deque(ast.literal_eval(setting_string),
+                                                   maxlen=10)
         else:
-            self.last_searches = deque(maxlen=10)
+            self.last_searches = collections.deque(maxlen=10)
 
     def onInit(self):
         self.get_autocomplete_labels_async()
@@ -99,7 +106,9 @@ class T9SearchDialog(xbmcgui.WindowXMLDialog):
         self.get_autocomplete_labels_async()
         if self.timer:
             self.timer.cancel()
-        self.timer = Timer(0.0, self.search, (self.search_str,))
+        self.timer = threading.Timer(interval=0.0,
+                                     function=self.search,
+                                     args=(self.search_str,))
         self.timer.start()
 
     @ch.action("parentdir", "*")
@@ -195,7 +204,9 @@ class T9SearchDialog(xbmcgui.WindowXMLDialog):
             self.color_labels(idx, letters, button)
         if self.timer:
             self.timer.cancel()
-        self.timer = Timer(1.0, self.search, (self.search_str,))
+        self.timer = threading.Timer(interval=1.0,
+                                     function=self.search,
+                                     args=(self.search_str,))
         self.timer.start()
         self.getControl(600).setLabel("[B]%s[/B]_" % self.search_str)
         self.get_autocomplete_labels_async()
@@ -219,5 +230,7 @@ class T9SearchDialog(xbmcgui.WindowXMLDialog):
         letter = letters[index]
         label = "[COLOR=FFFF3333]%s[/COLOR]" % letter
         self.getControl(9090).getListItem(button).setLabel2(letters.replace(letter, label))
-        self.color_timer = Timer(1.0, utils.reset_color, (self.getControl(9090).getListItem(button),))
+        self.color_timer = threading.Timer(interval=1.0,
+                                           function=utils.reset_color,
+                                           args=(self.getControl(9090).getListItem(button),))
         self.color_timer.start()
