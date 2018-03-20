@@ -3,15 +3,15 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from __future__ import unicode_literals
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
-import urllib
 import itertools
+import urllib
 
-from kodi65 import utils
-from kodi65 import VideoItem
 from kodi65 import ItemList
+from kodi65 import VideoItem
+from kodi65 import utils
 
 YT_KEY = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 BASE_URL = "https://www.googleapis.com/youtube/v3/"

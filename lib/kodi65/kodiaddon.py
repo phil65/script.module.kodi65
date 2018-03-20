@@ -3,17 +3,17 @@
 # Copyright (C) 2016 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from __future__ import unicode_literals
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
-import sys
-import os
 import base64
-import uuid
 import hashlib
+import os
+import sys
+import uuid
 
-import xbmcaddon
 import xbmc
+import xbmcaddon
 import xbmcgui
 
 HOME = xbmcgui.Window(10000)

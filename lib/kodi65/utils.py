@@ -3,22 +3,27 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from functools import wraps
-import threading
+from __future__ import absolute_import
+from __future__ import unicode_literals
+
+import datetime
+import functools
+import hashlib
 import json
 import os
-import datetime
-import time
 import re
-import hashlib
+import threading
+import time
 import urllib
+
 import xbmc
 import xbmcgui
 import xbmcvfs
-import requests
 
 import YDStreamExtractor
 from kodi65 import addon
+
+import requests
 
 
 def youtube_info_by_id(youtube_id):
@@ -125,7 +130,7 @@ def run_async(func):
     """
     Decorator to run a function in a separate thread
     """
-    @wraps(func)
+    @functools.wraps(func)
     def async_func(*args, **kwargs):
         func_hl = threading.Thread(target=func,
                                    args=args,
@@ -174,7 +179,6 @@ def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
     """
     show kodi notification dialog
     """
-
     xbmcgui.Dialog().notification(heading=header,
                                   message=message,
                                   icon=icon,

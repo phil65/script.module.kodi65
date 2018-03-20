@@ -3,13 +3,12 @@
 # Copyright (C) 2016 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from __future__ import unicode_literals
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
 import xbmcplugin
-
-from kodi65 import utils
 from kodi65 import addon
+from kodi65 import utils
 
 SORTS = {"none": xbmcplugin.SORT_METHOD_NONE,
          "unsorted": xbmcplugin.SORT_METHOD_UNSORTED,

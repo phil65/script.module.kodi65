@@ -3,17 +3,17 @@
 # Copyright (C) 2016 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from __future__ import unicode_literals
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
-import json
 import itertools
+import json
 
-from kodi65 import kodijson
-from kodi65 import addon
-from kodi65 import utils
-from kodi65 import VideoItem
 from kodi65 import ItemList
+from kodi65 import VideoItem
+from kodi65 import addon
+from kodi65 import kodijson
+from kodi65 import utils
 
 PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 MOVIE_PROPS = ["title", "genre", "year", "rating", "director", "trailer",
