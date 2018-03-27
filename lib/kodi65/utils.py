@@ -454,10 +454,11 @@ def fetch_musicbrainz_id(artist, artist_id=-1):
     results = get_JSON_response(url=base_url + url,
                                 cache_days=30,
                                 folder="MusicBrainz")
-    if results and len(results["artists"]) > 0:
+    if results and results.get("artists") and len(results["artists"]) > 0:
         log("found artist id for %s: %s" % (artist, results["artists"][0]["id"]))
         return results["artists"][0]["id"]
     else:
+        log("no mbid found for %s" % artist)
         return None
 
 
