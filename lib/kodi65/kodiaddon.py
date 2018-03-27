@@ -6,10 +6,11 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+from builtins import str
+
 import base64
 import hashlib
 import os
-import sys
 import uuid
 
 import xbmc
@@ -17,8 +18,6 @@ import xbmcaddon
 import xbmcgui
 
 HOME = xbmcgui.Window(10000)
-
-PY2 = sys.version_info[0] == 2
 
 
 class Addon(object):
@@ -28,21 +27,21 @@ class Addon(object):
 
     def __init__(self, *args, **kwargs):
         self.addon = xbmcaddon.Addon(*args)
-        self.ID = py2_decode(self.addon.getAddonInfo('id'))
-        self.ICON = py2_decode(self.addon.getAddonInfo('icon'))
-        self.NAME = py2_decode(self.addon.getAddonInfo('name'))
-        self.FANART = py2_decode(self.addon.getAddonInfo('fanart'))
-        self.AUTHOR = py2_decode(self.addon.getAddonInfo('author'))
-        self.CHANGELOG = py2_decode(self.addon.getAddonInfo('changelog'))
-        self.DESCRIPTION = py2_decode(self.addon.getAddonInfo('description'))
-        self.DISCLAIMER = py2_decode(self.addon.getAddonInfo('disclaimer'))
-        self.VERSION = py2_decode(self.addon.getAddonInfo('version'))
-        self.PATH = py2_decode(self.addon.getAddonInfo('path'))
-        self.PROFILE = py2_decode(self.addon.getAddonInfo('profile'))
-        self.SUMMARY = py2_decode(self.addon.getAddonInfo('summary'))
-        self.TYPE = py2_decode(self.addon.getAddonInfo('type'))
+        self.ID = str(self.addon.getAddonInfo('id'))
+        self.ICON = str(self.addon.getAddonInfo('icon'))
+        self.NAME = str(self.addon.getAddonInfo('name'))
+        self.FANART = str(self.addon.getAddonInfo('fanart'))
+        self.AUTHOR = str(self.addon.getAddonInfo('author'))
+        self.CHANGELOG = str(self.addon.getAddonInfo('changelog'))
+        self.DESCRIPTION = str(self.addon.getAddonInfo('description'))
+        self.DISCLAIMER = str(self.addon.getAddonInfo('disclaimer'))
+        self.VERSION = str(self.addon.getAddonInfo('version'))
+        self.PATH = str(self.addon.getAddonInfo('path'))
+        self.PROFILE = str(self.addon.getAddonInfo('profile'))
+        self.SUMMARY = str(self.addon.getAddonInfo('summary'))
+        self.TYPE = str(self.addon.getAddonInfo('type'))
         self.MEDIA_PATH = os.path.join(self.PATH, "resources", "skins", "Default", "media")
-        self.DATA_PATH = py2_decode(xbmc.translatePath("special://profile/addon_data/%s" % self.ID))
+        self.DATA_PATH = str(xbmc.translatePath("special://profile/addon_data/%s" % self.ID))
 
     def setting(self, setting_name):
         """
@@ -124,14 +123,3 @@ def decode_string(enc):
         dec_c = chr((256 + ord(enc[i]) - ord(key_c)) % 256)
         dec.append(dec_c)
     return "".join(dec)
-
-
-def py2_decode(s, encoding='utf-8'):
-    """
-    Decode Python 2 ``str`` to ``unicode``
-
-    In Python 3 the string is not changed.
-    """
-    if PY2 and isinstance(s, str):
-        s = s.decode(encoding)
-    return s

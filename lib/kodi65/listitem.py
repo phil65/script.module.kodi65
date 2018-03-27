@@ -6,6 +6,8 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+from builtins import str
+
 import xbmc
 import xbmcgui
 
@@ -208,19 +210,19 @@ class ListItem(object):
         return {k: v for k, v in self._properties.iteritems() if v}
 
     def get_listitem(self):
-        listitem = xbmcgui.ListItem(label=unicode(self.label) if self.label else "",
-                                    label2=unicode(self.label2) if self.label2 else "",
+        listitem = xbmcgui.ListItem(label=str(self.label) if self.label else "",
+                                    label2=str(self.label2) if self.label2 else "",
                                     path=self.path)
-        props = {k: unicode(v) for k, v in self._properties.iteritems() if v}
+        props = {k: str(v) for k, v in self._properties.iteritems() if v}
         infos = {k.lower(): v for k, v in self._infos.iteritems() if v}
         infos["path"] = self.path
         if "duration" in infos:
             props['duration(h)'] = utils.format_time(infos["duration"], "h")
             props['duration(m)'] = utils.format_time(infos["duration"], "m")
         for key, value in props.iteritems():
-            listitem.setProperty(key, unicode(value))
+            listitem.setProperty(key, str(value))
         for key, value in self.specials.iteritems():
-            listitem.setProperty(key, unicode(value))
+            listitem.setProperty(key, str(value))
         artwork = {k: v for k, v in self._artwork.iteritems() if v}
         if artwork:
             listitem.setArt(artwork)
@@ -237,7 +239,7 @@ class ListItem(object):
                                 self.get_artwork(),
                                 self.get_infos())
         for k, v in dct.iteritems():
-            window.setProperty('%s%s' % (prefix, k), unicode(v))
+            window.setProperty('%s%s' % (prefix, k), str(v))
 
 
 class AudioItem(ListItem):

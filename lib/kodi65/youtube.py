@@ -6,6 +6,8 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+from builtins import str
+
 import itertools
 import urllib
 
@@ -55,9 +57,9 @@ def handle_videos(results, extended=False):
             if not item.get_property("youtube_id") == ext_item['id']:
                 continue
             details = ext_item['contentDetails']
-            stats = ext_item['statistics']
-            likes = stats.get('likeCount')
-            dislikes = stats.get('dislikeCount')
+            stats = ext_item.get('statistics')
+            likes = stats.get('likeCount') if stats else None
+            dislikes = stats.get('dislikeCount') if stats else None
             item.update_infos({"duration": get_duration_in_seconds(details['duration'])})
             props = {"duration": details['duration'][2:].lower(),
                      "formatted_duration": get_formatted_duration(details['duration']),
@@ -174,7 +176,7 @@ def get_data(method, params=None, cache_days=0.5):
     """
     params = params if params else {}
     params["key"] = YT_KEY
-    params = {k: unicode(v).encode('utf-8') for k, v in params.iteritems() if v}
+    params = {k: str(v) for k, v in params.iteritems() if v}
     url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                method=method,
                                                params=urllib.urlencode(params))

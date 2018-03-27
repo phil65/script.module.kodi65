@@ -6,6 +6,8 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+from builtins import str
+
 import datetime
 import functools
 import hashlib
@@ -401,8 +403,7 @@ def dict_to_windowprops(data=None, prefix="", window_id=10000):
     if not data:
         return None
     for (key, value) in data.iteritems():
-        value = unicode(value)
-        window.setProperty('%s%s' % (prefix, key), value)
+        window.setProperty('%s%s' % (prefix, key), str(value))
 
 
 def get_file(url):
@@ -489,7 +490,7 @@ def dict_to_listitems(data=None):
         for (key, value) in result.iteritems():
             if not value:
                 continue
-            value = unicode(value)
+            value = str(value)
             if key.lower() in ["name", "label"]:
                 listitem.setLabel(value)
             elif key.lower() in ["label2"]:
